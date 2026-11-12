@@ -1,0 +1,18 @@
+{{ $filename := .filename | default "" -}}
+{{ $lang := .lang | default "" }}
+{{ $content := .content }}
+{{ $options := .options | default (dict) }}
+
+<div class="relative group code-block not-prose my-5">
+  <div class="code-head flex items-center justify-between px-4 py-1.5 text-xs font-mono text-muted">
+    <span>{{ with $filename }}{{ . }}{{ else }}{{ $lang }}{{ end }}</span>
+    <button onclick="copyCode(this)" class="cursor-pointer p-1.5 rounded-lg hover:bg-[var(--ctl-hover)] text-fg" aria-label="Copy">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+    </button>
+  </div>
+  {{- if transform.CanHighlight $lang -}}
+    {{- highlight $content $lang $options -}}
+  {{- else -}}
+    <pre class="chroma"><code>{{ $content }}</code></pre>
+  {{- end -}}
+</div>

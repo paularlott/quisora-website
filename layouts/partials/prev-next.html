@@ -1,0 +1,18 @@
+{{- $prev := .PrevInSection -}}
+{{- $next := .NextInSection -}}
+{{- if or $prev $next -}}
+<nav class="mt-12 flex flex-col sm:flex-row gap-3 border-t border-edge pt-6" aria-label="Previous and next page">
+  {{ with $next }}
+  <a href="{{ .RelPermalink }}" class="flex-1 rounded-2xl px-4 py-3 no-underline text-fg hover:bg-[var(--ctl-hover)] ring-1 ring-[var(--edge)]">
+    <div class="text-xs text-muted">Previous</div>
+    <div class="font-semibold">{{ .LinkTitle }}</div>
+  </a>
+  {{ else }}<div class="flex-1"></div>{{ end }}
+  {{ with $prev }}
+  <a href="{{ .RelPermalink }}" class="flex-1 rounded-2xl px-4 py-3 no-underline text-fg text-right hover:bg-[var(--ctl-hover)] ring-1 ring-[var(--edge)]">
+    <div class="text-xs text-muted">Next</div>
+    <div class="font-semibold">{{ .LinkTitle }}</div>
+  </a>
+  {{ else }}<div class="flex-1"></div>{{ end }}
+</nav>
+{{- end -}}

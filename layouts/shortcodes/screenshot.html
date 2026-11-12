@@ -1,0 +1,25 @@
+{{- /*
+  A screenshot of Quisora in both themes; the one matching the site's theme is shown, and a click enlarges it.
+  The files are static/images/shots/<name>-light.webp and <name>-dark.webp.
+  Usage: {{< screenshot name="login" alt="The sign-in page" caption="Optional caption" class="max-w-md" >}}
+*/ -}}
+{{- $name := .Get "name" -}}
+{{- $alt := .Get "alt" -}}
+{{- $caption := .Get "caption" | default "" -}}
+{{- $class := .Get "class" | default "" -}}
+{{- $light := printf "/images/shots/%s-light.webp" $name -}}
+{{- $dark := printf "/images/shots/%s-dark.webp" $name -}}
+{{- if not (fileExists (path.Join "static" $light)) }}{{ errorf "screenshot: %s not found (%s)" $light .Page.File.Path }}{{ end -}}
+<figure class="not-prose my-8 {{ $class }} mx-auto">
+  {{- range $theme, $src := dict "light" $light "dark" $dark }}
+  <button type="button" class="zoom-trigger shot-{{ $theme }} group relative w-full cursor-zoom-in rounded-2xl" onclick="openImageModal('{{ $src }}', '{{ $alt }}', '{{ $caption | markdownify | htmlEscape | safeJS }}')" aria-label="Enlarge: {{ $alt }}">
+    <img src="{{ $src }}" alt="{{ $alt }}" loading="lazy" class="shot w-full h-auto">
+    <span class="pointer-events-none absolute right-3 top-3 rounded-xl glass-panel p-2 opacity-0 transition-opacity group-hover:opacity-100">
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/></svg>
+    </span>
+  </button>
+  {{- end }}
+  {{- with $caption }}
+  <figcaption class="mt-3 text-sm text-muted text-center">{{ . | markdownify }}</figcaption>
+  {{- end }}
+</figure>

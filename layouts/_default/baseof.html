@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" class="{{ if eq .Site.Params.defaultTheme "dark" }}dark{{ end }}">
+<head>
+  <script>
+    (function() {
+      const defaultTheme = {{ .Site.Params.defaultTheme | default "light" | printf "%q" }};
+      let theme = null;
+      try { theme = localStorage.getItem('theme'); } catch (e) {}
+      if (!theme) theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : defaultTheme;
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/logo.svg">
+  <link rel="apple-touch-icon" href="/logo.svg">
+  <title>{{ if ne .Title .Site.Title }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
+  {{ partial "css.html" . }}
+  {{ with .Description }}<meta name="description" content="{{ . }}">{{ end }}
+</head>
+<body class="min-h-dvh flex flex-col">
+  <div class="aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  {{ partial "header.html" . }}
+  {{ partial "mobile-nav.html" . }}
+
+  <div class="flex flex-1 gap-6 max-w-screen-xl mx-auto w-full px-3 md:px-5">
+    {{ if and (not .IsHome) (ne .Kind "404") (not .Params.hideSidebar) }}
+      {{ partial "sidebar.html" . }}
+    {{ end }}
+    <main class="flex-1 min-w-0 pb-10">
+      {{ block "main" . }}{{ end }}
+    </main>
+  </div>
+
+  {{ partial "footer.html" . }}
+  {{ partial "search-modal.html" . }}
+  {{ partial "image-modal.html" . }}
+  {{ partial "js.html" . }}
+</body>
+</html>

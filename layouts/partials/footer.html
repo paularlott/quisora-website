@@ -1,0 +1,9 @@
+<footer class="max-w-screen-xl w-[calc(100%-1.5rem)] md:w-[calc(100%-2.5rem)] mx-auto mb-3">
+  <div class="glass-header rounded-[1.4rem] px-5 py-4 flex flex-col sm:flex-row gap-2 items-center justify-between text-sm text-fg">
+    <p>&copy; {{ now.Year }} {{ .Site.Params.copyright }}. Quisora is open source under the Apache License 2.0.</p>
+    <p class="flex gap-4">
+      <a href="/docs/" class="text-fg no-underline hover:underline">Docs</a>
+      <a href="{{ .Site.Params.githubURL }}" class="text-fg no-underline hover:underline">GitHub</a>
+    </p>
+  </div>
+</footer>

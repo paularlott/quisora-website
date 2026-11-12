@@ -1,0 +1,17 @@
+{{- /* The landing page's opening: a kicker, a title (wrap words in *…* to colour them), a line or two, two buttons and a screenshot. */ -}}
+<section class="text-center pt-6 sm:pt-12 pb-4">
+  {{ with .Get "kicker" }}<p class="kicker">{{ . }}</p>{{ end }}
+  <h1 class="hero-title mt-5 mb-5 max-w-4xl mx-auto">{{ .Get "title" | markdownify }}</h1>
+  <p class="text-lg sm:text-xl text-muted max-w-2xl mx-auto mb-8">{{ .Get "subtitle" | markdownify }}</p>
+  <div class="flex flex-wrap gap-3 justify-center">
+    {{ with .Get "btn1" }}<a href="{{ $.Get "btn1Link" }}" class="btn btn-primary">{{ . }}</a>{{ end }}
+    {{ with .Get "btn2" }}<a href="{{ $.Get "btn2Link" }}" class="btn btn-secondary">{{ . }}</a>{{ end }}
+  </div>
+  {{ with .Get "shot" }}
+  <div class="mt-12 sm:mt-16 max-w-5xl mx-auto">
+    {{ $alt := $.Get "alt" }}
+    <img src="/images/shots/{{ . }}-light.webp" alt="{{ $alt }}" class="shot shot-light w-full h-auto">
+    <img src="/images/shots/{{ . }}-dark.webp" alt="{{ $alt }}" class="shot shot-dark w-full h-auto">
+  </div>
+  {{ end }}
+</section>

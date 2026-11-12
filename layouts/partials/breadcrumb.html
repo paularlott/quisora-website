@@ -1,0 +1,9 @@
+<nav aria-label="Breadcrumb" class="glass inline-flex items-center gap-1.5 !rounded-full px-4 py-1.5 text-sm">
+  {{- range .Ancestors.Reverse -}}
+    {{- if not .IsHome -}}
+      <a href="{{ .RelPermalink }}" class="text-accent">{{ .LinkTitle }}</a>
+      <svg class="w-3 h-3 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    {{- end -}}
+  {{- end -}}
+  <span class="font-semibold">{{ .LinkTitle }}</span>
+</nav>

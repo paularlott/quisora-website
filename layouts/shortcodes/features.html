@@ -1,0 +1,8 @@
+{{- /* A titled grid of feature cards: {{< features title="…" intro="…" >}}{{< feature … >}}…{{< /features >}} */ -}}
+<section class="mt-20">
+  {{ with .Get "title" }}<h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-center mb-3">{{ . }}</h2>{{ end }}
+  {{ with .Get "intro" }}<p class="text-lg text-muted text-center max-w-2xl mx-auto mb-10">{{ . | markdownify }}</p>{{ end }}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    {{ .Inner }}
+  </div>
+</section>

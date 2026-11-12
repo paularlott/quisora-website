@@ -1,0 +1,1 @@
+{{- partial "components/codeblock" (dict "filename" (.Attributes.filename | default "") "lang" (.Attributes.lang | default .Type) "content" .Inner "options" .Options) -}}

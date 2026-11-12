@@ -1,0 +1,38 @@
+{{- /* Right-side in-page table of contents */ -}}
+{{- $tocItems := slice -}}
+{{- range findRE "<h[23][^>]*id=\"[^\"]+\"[^>]*>" .Content -}}
+  {{- $id := replaceRE `.*id="([^"]+)".*` "$1" . -}}
+  {{- $level := int (replaceRE `.*<h([23]).*` "$1" .) -}}
+  {{- $tocItems = $tocItems | append (dict "id" $id "level" $level) -}}
+{{- end -}}
+
+{{- /* Extract titles by finding the content between opening and closing tags */ -}}
+{{- $headingData := slice -}}
+{{- range $tocItems -}}
+  {{- $openTag := printf `<h%d[^>]*id="%s"[^>]*>` .level .id -}}
+  {{- $closeTag := printf `</h%d>` .level -}}
+  {{- $pattern := printf `%s(.*?)%s` $openTag $closeTag -}}
+  {{- $titleMatch := findRE $pattern $.Content 1 -}}
+  {{- $title := "" -}}
+  {{- with index $titleMatch 0 -}}
+    {{- $title = replaceRE $pattern "$1" . | plainify -}}
+  {{- end -}}
+  {{- $headingData = $headingData | append (dict "id" .id "level" .level "title" $title) -}}
+{{- end -}}
+
+{{- if gt (len $headingData) 1 -}}
+<aside class="hidden xl:block w-56 flex-shrink-0" aria-label="On this page">
+  <div class="sticky top-24 max-h-[calc(100dvh-7.5rem)] overflow-y-auto hide-scrollbar">
+    <div class="glass p-4">
+      <p class="text-xs font-bold uppercase tracking-widest text-muted mb-3">On this page</p>
+      <nav id="toc-nav" class="space-y-0.5 border-l border-edge">
+        {{- range $headingData -}}
+          <a href="#{{ .id }}" data-toc-level="{{ .level }}" class="toc-link block text-sm py-1 pr-2 -ml-px border-l-2 border-transparent text-muted hover:text-fg {{ if eq .level 3 }}pl-5{{ else }}pl-3{{ end }}">
+            {{- .title -}}
+          </a>
+        {{- end -}}
+      </nav>
+    </div>
+  </div>
+</aside>
+{{- end -}}

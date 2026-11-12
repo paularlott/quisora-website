@@ -1,0 +1,7 @@
+{{ define "main" }}
+<article class="glass px-5 py-6 sm:px-9 sm:py-8 prose max-w-none">
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+  <ul>{{ range .Pages }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}</ul>
+</article>
+{{ end }}

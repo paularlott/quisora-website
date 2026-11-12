@@ -1,0 +1,27 @@
+<div id="search-modal" class="hidden fixed inset-0 z-[70] overflow-y-auto">
+  <div class="flex items-start justify-center min-h-screen pt-20 px-3 pb-20">
+    <div class="search-backdrop fixed inset-0 bg-[var(--scrim)] backdrop-blur-sm z-40"></div>
+    <div class="glass-panel relative w-full max-w-2xl z-50 p-5 sm:p-6 !rounded-[1.75rem]" role="dialog" aria-label="Search">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold">Search the docs</h2>
+        <button id="search-close" class="icon-btn" aria-label="Close search">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="relative">
+        <input type="text" id="search-input" placeholder="Passkeys, backups, cluster…" autocomplete="off" spellcheck="false" aria-label="Search the docs" class="w-full pl-11 pr-4 py-3 rounded-full bg-[var(--ctl-bg)] border border-[var(--ctl-border)] text-fg text-base focus:outline-none focus-visible:outline-3 focus-visible:outline-[var(--focus)]">
+        <svg class="w-5 h-5 text-muted absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </div>
+      <div id="search-results" class="mt-4 max-h-96 overflow-y-auto hidden">
+        <div class="space-y-2" id="search-results-list"></div>
+      </div>
+      <div id="search-loading" class="mt-4 text-center text-muted hidden"><p>Loading the search index…</p></div>
+      <div id="search-empty" class="mt-4 text-center text-muted hidden"><p>Nothing found</p></div>
+      <div class="mt-4 pt-3 border-t border-edge hidden sm:flex items-center justify-center gap-6 text-xs text-muted">
+        <span><kbd class="px-2 py-0.5 rounded bg-[var(--code-bg)]">↑↓</kbd> Move</span>
+        <span><kbd class="px-2 py-0.5 rounded bg-[var(--code-bg)]">↵</kbd> Open</span>
+        <span><kbd class="px-2 py-0.5 rounded bg-[var(--code-bg)]">Esc</kbd> Close</span>
+      </div>
+    </div>
+  </div>
+</div>

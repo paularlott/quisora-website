@@ -1,0 +1,14 @@
+{{ define "main" }}
+{{ partial "breadcrumb.html" . }}
+<div class="flex gap-6 mt-4">
+  <article class="glass flex-1 min-w-0 px-5 py-6 sm:px-9 sm:py-8">
+    <div class="prose max-w-none">
+      <h1 class="!mb-3">{{ .Title }}</h1>
+      {{ with .Description }}<p class="lead !mt-0">{{ . }}</p>{{ end }}
+      {{ .Content }}
+    </div>
+    {{ partial "prev-next.html" . }}
+  </article>
+  {{ partial "toc.html" . }}
+</div>
+{{ end }}

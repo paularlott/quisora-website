@@ -1,0 +1,23 @@
+{{- /* The docs tree: one level of pages under each docs section, ordered by weight. On phones the header links come first. */ -}}
+{{- $ctx := .context -}}
+{{ if .mobile }}
+  <ul class="space-y-1 mb-2">
+    {{ range $ctx.Site.Params.navigation.header }}
+      <li><a href="{{ .url }}" class="nav-link{{ if eq $ctx.RelPermalink .url }} active-nav-item{{ end }}">{{ .name }}</a></li>
+    {{ end }}
+  </ul>
+{{ end }}
+{{ with site.GetPage "/docs" }}
+  <div class="nav-group">Documentation</div>
+  <ul class="space-y-1">
+    <li><a href="{{ .RelPermalink }}" class="nav-link{{ if eq $ctx.RelPermalink .RelPermalink }} active-nav-item{{ end }}">Overview</a></li>
+    {{ range where .Pages.ByWeight "Params.nav-skip" "ne" true }}
+      <li><a href="{{ .RelPermalink }}" class="nav-link{{ if eq $ctx.RelPermalink .RelPermalink }} active-nav-item{{ end }}">{{ .LinkTitle }}</a></li>
+    {{ end }}
+  </ul>
+{{ end }}
+<div class="nav-group">More</div>
+<ul class="space-y-1">
+  <li><a href="{{ site.Params.githubURL }}" class="nav-link">Source on GitHub</a></li>
+  <li><a href="{{ site.Params.docsURL }}/docs/RUNNING.md" class="nav-link">Full operator guide</a></li>
+</ul>

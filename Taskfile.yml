@@ -1,0 +1,10 @@
+version: "3"
+
+tasks:
+  default:
+    desc: "Show available tasks"
+    cmd: task --list
+
+  build:
+    desc: "Build the site into public/"
+    cmd: "hugo ${HUGO_ARGS:-}"

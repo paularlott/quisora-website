@@ -1,0 +1,18 @@
+{{- /* Text beside a screenshot, on a glass card: {{< showcase shot="login" alt="…" reverse=true >}}## Title
+Text{{< /showcase >}} */ -}}
+{{- $shot := .Get "shot" -}}
+{{- $alt := .Get "alt" -}}
+{{- $reverse := eq (.Get "reverse") "true" -}}
+<section class="glass mt-8 p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
+  <div class="lg:col-span-2 {{ if $reverse }}lg:order-last{{ end }} showcase-text">
+    {{ partial "utils/markdownify.html" (dict "page" .Page "text" .Inner) }}
+  </div>
+  <div class="lg:col-span-3">
+    <button type="button" class="zoom-trigger shot-light w-full cursor-zoom-in rounded-2xl" onclick="openImageModal('/images/shots/{{ $shot }}-light.webp', '{{ $alt }}', '')" aria-label="Enlarge: {{ $alt }}">
+      <img src="/images/shots/{{ $shot }}-light.webp" alt="{{ $alt }}" loading="lazy" class="shot w-full h-auto">
+    </button>
+    <button type="button" class="zoom-trigger shot-dark w-full cursor-zoom-in rounded-2xl" onclick="openImageModal('/images/shots/{{ $shot }}-dark.webp', '{{ $alt }}', '')" aria-label="Enlarge: {{ $alt }}">
+      <img src="/images/shots/{{ $shot }}-dark.webp" alt="{{ $alt }}" loading="lazy" class="shot w-full h-auto">
+    </button>
+  </div>
+</section>
