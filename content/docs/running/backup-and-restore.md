@@ -101,4 +101,4 @@ quisora restore quisora.bak                   # into the configured store, witho
   since (and its private half), undo revocations made since, and know nothing of the certificates issued after the backup,
   which then cannot be revoked by serial. For each such tenant: rotate the user CA key (and the host key) immediately,
   remove the old keys, which makes the revocation list revoke them outright on every server that fetches it, re-revoke
-  what was revoked since, and have everyone sign in again ([Backup and restore](/docs/ssh/backup-and-restore/)).
+  what was revoked since, and have everyone sign in again ([Backup and restore](/docs/ssh/revoking-and-rotating/#after-restoring-a-backup)).

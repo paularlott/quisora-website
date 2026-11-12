@@ -52,7 +52,7 @@ curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/jso
 ```
 
 The answer's `id` is the client ID the device uses. (Quisora's own `quisora ssh login --device` is a device sign-in too: the tenant's
-[SSH application](/docs/ssh/turning-it-on-for-a-tenant/) has it turned on, and the same risk applies. It sends `acr_values` and `max_age` with the request, so the session that approves the code is stepped up to a second factor.)
+[SSH application](/docs/ssh/turning-it-on/) has it turned on, and the same risk applies. It sends `acr_values` and `max_age` with the request, so the session that approves the code is stepped up to a second factor.)
 
 ## The device's side, step by step
 

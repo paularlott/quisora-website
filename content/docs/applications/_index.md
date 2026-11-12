@@ -97,7 +97,7 @@ The answer is the client, with its `id` and, once, its `secret`. Every field is 
   application under **Connected apps** on their account page, a manager does on the admin user page, or the account
   is locked out.
 - **First-party application** (super admins only) never asks, for applications you run yourselves. A tenant's SSH
-  application is the exception: it always asks ([SSH](/docs/ssh/risks/)).
+  application is the exception: it always asks ([SSH](/docs/ssh/#good-to-know)).
 
 Either way the screen comes back for scopes or resources not yet allowed, and whenever the application sends
 `prompt=consent`. What a user allowed is for the application as it was: once its redirect URIs or credentials

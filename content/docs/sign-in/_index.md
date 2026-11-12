@@ -121,7 +121,7 @@ from the user's page. Changing a password signs the user out of every other brow
 | The browser session | ends | ends |
 | Applications' sign-ins without `offline_access` | end | end |
 | Applications' sign-ins with `offline_access` | go on, to their own expiry | end |
-| [SSH certificates](/docs/ssh/revocation/) issued in it, or to `quisora ssh` through it | go on, to their expiry | revoked |
+| [SSH certificates](/docs/ssh/revoking-and-rotating/) issued in it, or to `quisora ssh` through it | go on, to their expiry | revoked |
 
 Signing out is the user leaving this browser; ending a session is taking back what it gave, as for a session someone
 else may hold. "Sign out all other sessions" ends the others in that way and keeps the current one with everything it

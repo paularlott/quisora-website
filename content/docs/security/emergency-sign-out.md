@@ -72,7 +72,7 @@ Ended, at once, on every node:
 - with the option, every personal API token, for good. (Turning off the organization's setting for who may make `api`
   tokens only stops them while it is off; see [Personal API tokens](/docs/automation/api-tokens/#who-may-make-api-tokens).)
 
-The [SSH certificates](/docs/ssh/revocation/) the organizations' tenants issued before it go on their revocation
+The [SSH certificates](/docs/ssh/revoking-and-rotating/) the organizations' tenants issued before it go on their revocation
 lists within 30 seconds, and a server refuses them when it next fetches the list (a minute or two with the timer in
 the guide), and a session already open on a server stays open unless the server runs `fetch --end-revoked`. Host
 certificates are not affected.
@@ -124,7 +124,7 @@ It disables the account and, at once:
   applications is forgotten, so each asks again;
 - removes every way they had to sign in: password, authenticator app, passkeys, recovery codes, linked providers;
 - removes their personal API tokens and any unused invitation, reset and verification links;
-- puts their [SSH certificates](/docs/ssh/revocation/) on the revocation list, so servers refuse them within a
+- puts their [SSH certificates](/docs/ssh/revoking-and-rotating/) on the revocation list, so servers refuse them within a
   minute or two (a session already open stays open).
 
 The account itself stays, for the audit log. Enabling it again brings none of that back: send them a **New invitation

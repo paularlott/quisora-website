@@ -85,7 +85,7 @@ Alerts worth having:
   shows the address of each 429.
 - For tenants that use SSH certificates: a log line `oidc: making an SSH revocation list` at error level (the tenant's
   revocation list could not be made; its address answers 503 and servers keep their old list), and, on every server that
-  fetches it, the fetch unit failing or the revocation list file older than 5 minutes ([SSH monitoring](/docs/ssh/monitoring/)).
+  fetches it, the fetch unit failing or the revocation list file older than 5 minutes ([SSH monitoring](/docs/ssh/setting-up-a-server/#watch-it)).
 
 ## Access log
 

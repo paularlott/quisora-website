@@ -18,7 +18,7 @@ backup. It does not defend against someone who controls a node's host, its proce
 | Internet → HTTPS | TLS 1.2+ only; strict CSP and HSTS; `__Host-` cookies (one session cookie per organization); CSRF tokens plus Origin checks; rate limits and lockouts; load shedding; passwords of at least the organization's shortest, else `limits.password_min_length` characters (15 by default), refused when they are a common word dressed up, a keyboard or alphabet run, a repeated pattern, or built on the person's name, email or organization (offline checks, nothing is looked up elsewhere; there is no list of breached passwords) | A real certificate (or a TLS proxy), `server.trust_proxy` behind a load balancer |
 | Applications (OAuth clients) | Exact redirect URIs, PKCE, single-use codes, rotating refresh tokens with reuse detection, audience-bound introspection; every organization is its own authorization server (its own issuer and endpoints: a client of another organization is unknown, and a token of one is not valid at another's) | Least-privilege clients: scopes, tenants, `introspect_org` only for resource servers; `accepts_api_tokens` only for applications that check personal API tokens |
 | Organizations and tenants | One authorization layer in the service; organization checked on every read and write; each organization has its own address space, `/o/<org>/…`, and its own browser session, and its unique values are its own | Few super admins; reviewed access |
-| SSH certificates | Certificates only after a second-factor sign-in, short-lived, with principals from the user's username, `group:` groups and `role:` roles (a username holds no colon, so none can be named like a group); a revocation list worked out from the user's state, which also revokes CA keys outright; the CA keys sealed with the master key | `AuthorizedPrincipalsFile` on every server, privileged accounts mapped by group and never by username; the fetch timer and its [monitoring](/docs/ssh/monitoring/); `RevokedHostKeys` on clients and short host certificates; a login that works while Quisora does not ([guide](/docs/ssh/setting-up-an-ubuntu-server/#if-quisora-is-not-reachable)) |
+| SSH certificates | Certificates only after a second-factor sign-in, short-lived, with principals from the user's username, `group:` groups and `role:` roles (a username holds no colon, so none can be named like a group); a revocation list worked out from the user's state, which also revokes CA keys outright; the CA keys sealed with the master key | `AuthorizedPrincipalsFile` on every server, privileged accounts mapped by group and never by username; the fetch timer and its [monitoring](/docs/ssh/setting-up-a-server/#watch-it); `RevokedHostKeys` on clients and short host certificates; a login that works while Quisora does not ([guide](/docs/ssh/setting-up-a-server/#keep-another-way-in)) |
 | Database and backups | Secrets sealed with the master key (TOTP secrets, signing and provider keys, tenants' SSH CA keys, upstream tokens); passwords hashed (argon2id) and the hashes sealed with the master key too (the pepper); bearer secrets stored as hashes; backups encrypted with a password | Encryption at rest of the storage (or BadgerDB's `encryption_key`); verified TLS to a database server |
 | Node ↔ node (gossip) | Messages encrypted and authenticated with `cluster.key`; incompatible builds refused; a catch-up stream goes from the database to the other node's database without touching the disk in between | `cluster.key` kept like the master key; the gossip port reachable by cluster members only; BadgerDB with `storage.badgerdb.sync_writes = true` |
 | Outbound (providers, JWKS, back-channel logout, pictures given by URL) | The address actually dialled is checked: no private or loopback addresses but the networks in `allowed_networks` (or all of them with `allow_private_networks`), and never metadata, link-local or special-purpose addresses |: |
@@ -60,7 +60,7 @@ organization that wants none sets `settings.pictures` to `off`: nothing is uploa
 pictures it held are deleted. A server that wants none for any organization starts with `--disable-pictures`
 (`server.disable_pictures = true`): every organization behaves as if its setting were `off`.
 
-**SSH certificates: known limits.** The [guide](/docs/ssh/risks/#known-limits) has the detail.
+**SSH certificates: known limits.** The [guide](/docs/ssh/#good-to-know) has the detail.
 
 - Open sessions on a server stay open unless it runs `quisora ssh fetch --end-revoked` (Linux with journald; it ends
   connections of revoked certificates and any open longer than `cert_ttl`, with their whole login session where
@@ -163,7 +163,7 @@ list and servers refuse them when they next fetch it, in a minute or two. Signin
 application's grant, is **not** enough: it leaves the certificates asked for under it valid. An
 [emergency sign-out](/docs/security/emergency-sign-out/) revokes every certificate issued before it the same way. Sessions already
 open on a server stay open: end them there. Look in the audit log for `ssh.cert.issue` by that person and in sshd's log
-for the certificate's key id and serial ([SSH certificates](/docs/ssh/revocation/)).
+for the certificate's key id and serial ([SSH certificates](/docs/ssh/revoking-and-rotating/)).
 
 **An SSH CA key may be exposed.** Anyone holding it can sign a certificate for any principal, and no list of serials names
 such a certificate. In the tenant's **SSH certificates** card (or `POST /api/orgs/{org}/tenants/{id}/ssh/rotate` with
@@ -172,14 +172,14 @@ the key **immediately**, then **remove** the old key. Rotating alone leaves the 
 makes the revocation list revoke the key itself, so every server that fetches the list distrusts the key and everything
 it signed, forged certificates included, whether or not its CA file changed. Everyone signs in again for a new
 certificate. For a host key, also re-sign the hosts and refresh the clients' `known_hosts`; clients refuse the old host key
-only if they fetch the list and set `RevokedHostKeys` ([CA key rotation](/docs/ssh/ca-key-rotation/)). The CA keys
+only if they fetch the list and set `RevokedHostKeys` ([CA key rotation](/docs/ssh/revoking-and-rotating/#rotating-the-ca-key)). The CA keys
 are sealed with the master key, so a leaked master key together with a copy of the database exposes them too: rotate and
 remove them for every tenant that uses SSH. After a restore from backup do the same
-([Backup and restore](/docs/ssh/backup-and-restore/)).
+([Backup and restore](/docs/ssh/revoking-and-rotating/#after-restoring-a-backup)).
 
 **A tenant's SSH access must stop altogether.** Turn SSH **off** (not delete the SSH application, which Quisora makes again
 within a minute): the revocation list then revokes every certificate and every CA key of the tenant. Delete the tenant only
-after the servers have fetched that list ([turning it off](/docs/ssh/turning-it-on-for-a-tenant/#turning-it-off-and-removing-a-tenant)).
+after the servers have fetched that list ([turning it off](/docs/ssh/turning-it-on/#turning-it-off)).
 
 **The master key may be exposed.** Whoever holds it and a copy of the database, or a backup, from before the rotation
 can open everything it sealed, and a rotation re-seals those secrets without changing them. This is the whole list:

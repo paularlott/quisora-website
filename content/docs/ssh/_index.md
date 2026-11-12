@@ -1,71 +1,46 @@
 ---
 title: "SSH certificates"
 linkTitle: "SSH certificates"
-description: "Short-lived SSH certificates for people and servers, signed by a tenant's certificate authority."
+description: "Log in to servers with short-lived certificates instead of copying keys around."
 weight: 150
 ---
 
-Quisora can act as the SSH certificate authority of a tenant. People sign in to Quisora with a second factor and get a
-short-lived OpenSSH certificate for their key. Servers trust the tenant's CA key instead of a list of user keys, and the
-certificate's principals (the person's username, `group:<name>` for each of their groups, `role:<role>` for each
-application role) decide who may log in as which Linux account. Access is managed in Quisora: remove someone from a
-group, disable them or sign them out, and their certificates stop working within a minute or two, with no key to remove
-from any server.
+Quisora can be the SSH certificate authority for a tenant. People sign in to Quisora with a second factor and get a
+certificate for their SSH key that lasts a few hours. Servers trust the tenant's CA key, so nobody's key has to be
+copied to a server.
 
-Quisora signs **user certificates** for people and, if you turn it on, **host certificates** for servers, so that
-people's ssh clients trust a server without asking about its key. It never sees a private key: it signs the public key
-it is given.
+Access is managed in Quisora. Remove someone from a group, disable them or sign them out, and their certificates stop
+working within a minute or two. There is no key to hunt down on every server.
 
-```
-Workstation                              Quisora                                   Server (sshd)
-  │ quisora ssh login ───────────────▶  │ sign in, second factor                         │
-  │ ◀─── certificate: principals, 8 h   │                                                │
-  │                                     │ ◀── quisora ssh fetch, every minute ────────── │
-  │                                     │ ──▶ CA public keys, revocation list (KRL) ───▶ │
-  │ ssh ubuntu@server (key + certificate) ─────────────────────────────────────────────▶ │
-  │         sshd checks: CA trusted? not revoked? in date? a principal listed in principals/ubuntu?
-```
+## How it works
 
-The public addresses are under the organization's issuer, `https://id.example.com/o/<org id>`; a tenant's SSH address, the
-**discovery URL** the commands start from, is `https://id.example.com/o/<org id>/ssh/<tenant id>`. Use the tenant's
-**id** (the console and the account page show it that way): the tenant's name works in the address too, but a tenant
-that is renamed no longer answers to its old name, and a server still fetching from it gets `404` and goes on with its
-last copy of the files, which stops its revocations without any other sign than a failing fetch.
+1. A person runs `quisora ssh login` (or uses their account page) and signs in with a second factor.
+2. Quisora signs their public key. The certificate lists their **principals**: their username, `group:<name>` for each
+   of their groups and, if you turn it on, `role:<role>` for their application roles.
+3. Each server fetches the tenant's CA key and revocation list every minute.
+4. When the person connects, the server checks the certificate is signed by the CA, not revoked, in date, and carries a
+   principal that is allowed to log in as that account.
 
-**What to know before you start.**
+Quisora never sees a private key. It only signs public keys.
 
-- A certificate is checked when someone connects. Revoking one, or ending a person's access, stops new logins within a
-  minute or two ([Revocation](/docs/ssh/revocation/)); sessions already open stay open unless servers run `fetch` with
-  `--end-revoked`, which ends them within the same minute or two ([Setting up an Ubuntu server](/docs/ssh/setting-up-an-ubuntu-server/), step 7).
-- The revocation list must always be present on the server, or sshd refuses every public-key login
-  ([Why the revocation list must always be there](/docs/ssh/setting-up-an-ubuntu-server/#why-the-revocation-list-must-always-be-there)).
-- Quisora does not create Linux accounts. Each account people log in as must exist on the server
-  ([Linux accounts](/docs/ssh/setting-up-an-ubuntu-server/#linux-accounts-must-exist)).
-- Always match certificates to accounts with `AuthorizedPrincipalsFile`, never with sshd's default (the principal must
-  equal the login name), and do not map privileged accounts such as `root` by username: people who can create or rename
-  users decide what a username is ([Principals](/docs/ssh/turning-it-on-for-a-tenant/#principals)).
-- A revoked or removed **host** certificate is refused only by clients that set `RevokedHostKeys`; sshd's `RevokedKeys`
-  covers user logins only ([Host certificates](/docs/ssh/host-certificates/)).
-- Certificates already issued go on working while Quisora is down, but nobody can get a new one. Keep a way into your
-  servers that does not depend on Quisora ([If Quisora is not reachable](/docs/ssh/setting-up-an-ubuntu-server/#if-quisora-is-not-reachable)).
-- Someone can start a device sign-in on their own machine and send a victim the code. If the victim enters it, the
-  attacker gets a certificate with the victim's principals ([Risks](/docs/ssh/risks/)).
+## Good to know
+
+- **Quisora does not create Linux accounts.** The accounts people log in as must already exist on the server.
+- **Keep another way in.** Certificates already issued keep working while Quisora is down, but nobody can get a new one.
+  Keep an emergency key or console access for your servers, and especially for the ones that run Quisora.
+- **Open sessions stay open** after a certificate is revoked, unless the server ends them
+  ([Setting up a server](/docs/ssh/setting-up-a-server/#ending-open-sessions)).
+- **Only enter a sign-in code you started yourself.** Someone could start a sign-in on their machine and send you the
+  code. If you enter it, they get a certificate in your name.
+
+Everything in the console can also be done through the management API. Every Quisora server shows its API reference at
+`/api-docs/`.
 
 ## In this guide
 
-- [Turning it on for a tenant](/docs/ssh/turning-it-on-for-a-tenant/)
-- [Setting up an Ubuntu server](/docs/ssh/setting-up-an-ubuntu-server/)
-- [Signing in from a workstation](/docs/ssh/signing-in-from-a-workstation/)
-- [The account page](/docs/ssh/the-account-page/)
+- [Turning it on](/docs/ssh/turning-it-on/)
+- [Setting up a server](/docs/ssh/setting-up-a-server/)
+- [Getting a certificate](/docs/ssh/getting-a-certificate/)
 - [Host certificates](/docs/ssh/host-certificates/)
-- [Revocation](/docs/ssh/revocation/)
-- [CA key rotation](/docs/ssh/ca-key-rotation/)
-- [Managers and administrators](/docs/ssh/managers-and-administrators/)
-- [Source addresses](/docs/ssh/source-addresses/)
-- [Risks](/docs/ssh/risks/)
-- [Backup and restore](/docs/ssh/backup-and-restore/)
-- [Monitoring](/docs/ssh/monitoring/)
-- [What is recorded](/docs/ssh/what-is-recorded/)
-- [Rate limits](/docs/ssh/rate-limits/)
+- [Revoking and rotating](/docs/ssh/revoking-and-rotating/)
 - [Troubleshooting](/docs/ssh/troubleshooting/)
-- [Reference](/docs/ssh/reference/)
