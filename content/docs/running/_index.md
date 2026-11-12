@@ -5,8 +5,7 @@ description: "Every setting, storage backends, clusters, the audit log, backups,
 weight: 100
 ---
 
-How to run Quisora on each storage backend, alone or as a cluster, with or without VictoriaLogs. The replication rules
-and the cluster recovery procedures are in [Replication and data integrity](/docs/replication/).
+How to run Quisora on each storage backend, alone or as a cluster, with or without VictoriaLogs.
 
 ## In this guide
 
@@ -20,6 +19,7 @@ and the cluster recovery procedures are in [Replication and data integrity](/doc
 - [The primary organization](/docs/running/the-primary-organization/)
 - [Storage backends](/docs/running/storage-backends/)
 - [Clustering](/docs/running/clustering/)
+- [Running a gossip cluster](/docs/running/cluster-operations/)
 - [Audit log](/docs/running/audit-log/)
 - [Docker](/docs/running/docker/)
 - [Backup and restore](/docs/running/backup-and-restore/)

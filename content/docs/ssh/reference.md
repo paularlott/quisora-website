@@ -23,5 +23,4 @@ weight: 160
 | Revocation timing | list kept 30 s per node, not cached by clients; servers fetch every minute |
 | CA key rotation | user key: published at once, signs in 7 days, old one published 25 h more; host key: signs at once. A removed key is revoked by the list for 24 h 10 min (user) or 365 days 10 min (host). |
 | Limits | 100 unexpired user certificates per user and tenant (revoked ones count); 20 signs a minute per person, 60 per address; 60 account-page revocations a minute per person; 16 000 fetch units a minute per address and tenant |
-| Stored | `ssh_ca_keys` (CA keys, private halves sealed with the master key; a removed key stays as a tombstone) and `ssh_certificates` (until an hour after they expire): [Database tables](/docs/internals/database/) |
-| Design | [SSH certificate authority](/docs/internals/ssh-ca-design/) |
+| Stored | `ssh_ca_keys` (CA keys, private halves sealed with the master key; a removed key stays as a tombstone) and `ssh_certificates` (until an hour after they expire) |

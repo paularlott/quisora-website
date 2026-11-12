@@ -25,9 +25,11 @@ This runs `hugo` and writes the site to `public/`. Extra Hugo flags can be passe
 
 ## Docs
 
-`content/docs/*.md` are the short guides. Each folder under `content/docs/` is a reference section, shown in the sidebar under **Reference**: running Quisora, replication, signing in, connecting applications, automation, SSH certificates, security and compliance, look and email, and internals.
+`content/docs/*.md` are the short guides. Each folder under `content/docs/` is a reference section, shown in the sidebar under **Reference**: running Quisora, signing in, connecting applications, automation, SSH certificates, security and compliance, and look and email.
 
-The reference was imported from the `docs/` folder (and `web/skins/README.md`) of the Quisora repository at commit `a2eb326`. The long guides were split into one page per section, links between docs were turned into site links, and links to code or other files still point at GitHub. Until the copies in the Quisora repository are removed, `git diff a2eb326 -- docs web/skins/README.md` there shows what has changed since.
+The docs cover what Quisora does, how to use it and how to run it. Material that a user or operator does not need (design notes, test results, release steps, database internals, code paths) stays out.
+
+The reference was imported from the `docs/` folder (and `web/skins/README.md`) of the Quisora repository at commit `a2eb326`, leaving out `REPLICATION.md` (its operator parts are in *Running a gossip cluster*), the design notes, `DATABASE.md`, `CONFORMANCE.md` and `RELEASING.md`. The long guides were split into one page per section, links between docs were turned into site links, and links to code or other files still point at GitHub. Until the copies in the Quisora repository are removed, `git diff a2eb326 -- docs web/skins/README.md` there shows what has changed since.
 
 ## Screenshots
 

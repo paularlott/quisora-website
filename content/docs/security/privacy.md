@@ -42,8 +42,7 @@ zone, phone, addresses).
 and refresh grants (applications are told through back-channel logout) and clears them as manager of others.
 Everything else that belonged to them (passkeys, connected providers with the address each gave, API tokens, group
 memberships, sign-in records, access entries) stops working at once, since it stands on the user record, and is removed by
-the orphan sweep, which reaches every record within about a day at five million users ([Replication](/docs/replication/),
-"Deletion"). Deleting an organization does the same for everything in it.
+the orphan sweep, which reaches every record within about a day at five million users. Deleting an organization does the same for everything in it.
 
 What remains:
 

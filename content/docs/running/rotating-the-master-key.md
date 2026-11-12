@@ -17,7 +17,7 @@ sealed them, and the log names keys by it (`key`).
 Each step below changes `server.master_key` and `server.previous_master_keys` in a node's config file, then either
 restarts the node or tells it to reload them, without a restart. On a gossip cluster every node reloads at once with
 **Reload configuration** on the admin console's System page (or `POST /api/cluster/reload`, see
-[Operator procedures](/docs/replication/operator-procedures/#changing-the-cluster-size)); a single node reloads with SIGHUP:
+[changing the cluster size](/docs/running/cluster-operations/#changing-the-cluster-size)); a single node reloads with SIGHUP:
 
 ```bash
 kill -HUP <pid>                          # systemd: systemctl reload quisora (ExecReload=/bin/kill -HUP $MAINPID)
@@ -26,7 +26,7 @@ docker kill --signal HUP quisora         # Kubernetes: kubectl exec <pod> -- kil
 
 - A reload reads only these two settings (and, on a gossip cluster, `cluster.key` and `cluster.previous_keys`: see
   [rotating the cluster key](/docs/running/clustering/#rotating-the-cluster-key); `cluster.size` and `cluster.peers`: see
-  [changing the cluster size](/docs/replication/operator-procedures/#changing-the-cluster-size); and on every node the limits and
+  [changing the cluster size](/docs/running/cluster-operations/#changing-the-cluster-size); and on every node the limits and
   `server.deny_networks`: see [limits and denied addresses](/docs/running/limits-and-denied-addresses/#changing-them-without-a-restart)), from the config file
   and the `QUISORA_*` environment variables as at start-up. Nothing else is reloaded.
 - Settings given on the command line (`--master-key`) cannot change while the server runs, so a reload leaves them

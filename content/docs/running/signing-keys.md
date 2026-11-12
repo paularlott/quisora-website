@@ -5,8 +5,7 @@ weight: 30
 
 Tokens are signed with ES256 by default (`tokens.signing_alg`; `EdDSA` is a little faster where every relying party
 supports it). A new key is made every `tokens.key_rotation_days` (30 by default; 0 rotates by hand only) by the
-housekeeping leader (in a cluster, the node that owns partition 0: `leader` in `GET /api/cluster`; housekeeping moves with it,
-see [Replication and data integrity](/docs/replication/), "Housekeeping"). It is published in the JWKS at once and signs 15 minutes later, so relying parties already know
+housekeeping leader (in a cluster, one node at a time: `leader` in `GET /api/cluster`). It is published in the JWKS at once and signs 15 minutes later, so relying parties already know
 it; the previous key stays published until the tokens it signed have expired, then it is removed.
 
 Super admins see the keys on the **System overview**: each key's state (signing, next, previous) and when it

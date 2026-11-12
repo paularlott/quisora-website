@@ -80,7 +80,7 @@ terminate-user`, or kill the sshd process) when that matters.
 To cut a person off at once from everything, lock them out ([emergency sign-out and lock-out](/docs/security/emergency-sign-out/#locking-out-one-person)):
 their certificates go on the list as `user_disabled`.
 
-In a [gossip cluster](/docs/replication/), a certificate signed on one node at the moment its sign-in is taken back on
+In a [gossip cluster](/docs/running/clustering/#replicated-gossip), a certificate signed on one node at the moment its sign-in is taken back on
 another may be handed out, as neither node has the other's change yet. Taking a sign-in back records it as taken back,
 and that record reaches every node like any change: once it and the certificate have both reached a node, the list
 that node makes revokes the certificate (`sign_in_ended`): the arrival of either makes the node's list again. So the

@@ -68,4 +68,4 @@ Don't restart a node just because it isn't ready. A node catching up is still al
 ## More
 
 - [Clustering in depth](/docs/running/clustering/)
-- [How replication works](/docs/replication/), with what to do when nodes are lost
+- [Running a gossip cluster](/docs/running/cluster-operations/), with what to do when nodes are lost

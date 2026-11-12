@@ -40,8 +40,7 @@ them all at once).
 
 - Nothing counted so far is reset: sign-in attempts in the current minute, an account's failed passwords, requests in
   flight. Tightening a limit applies to the next request against what has been counted already. A restart, by contrast,
-  starts counters again: with gossip they live in the memory of the node that owns them
-  ([Deletion](/docs/replication/deletion/#short-lived-state)), so restarting nodes mid-attack hands the attacker fresh budgets.
+  starts counters again: with gossip they live in the memory of the node that owns them, so restarting nodes mid-attack hands the attacker fresh budgets.
 - The file is checked first: one that does not parse, or a bad network or limit, fails the reload and nothing changes.
   The log says `configuration not (fully) reloaded` with `error` (such as `server.deny_networks: …` or `limits: …`).
   A reload that applies logs `configuration reloaded` with `changed`, for example `limits.login_per_ip_min 300 to 60`

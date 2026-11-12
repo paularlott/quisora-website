@@ -4,7 +4,7 @@ weight: 90
 ---
 
 Pick one with `storage.backend` (`--storage`). The tables or keys are created on first start; the database itself
-must exist. [Database tables](/docs/internals/database/) lists the tables and what each one holds.
+must exist.
 
 | Backend            | Use                                                            | Settings                                                                                         |
 | ------------------ | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -41,7 +41,7 @@ quisora serve --storage mysql
 quisora serve --storage sqlite --data-dir /var/lib/quisora
 ```
 
-Every backend passes the same store conformance suite. BadgerDB is the fastest; see [Sizing](/docs/running/sizing/).
+Every backend behaves the same. BadgerDB is the fastest; see [Sizing](/docs/running/sizing/).
 
 **Bounds on a statement (SQL backends).** Every connection Quisora opens limits how long one statement may run and how
 long it may wait for a lock:

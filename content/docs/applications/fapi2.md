@@ -5,8 +5,7 @@ weight: 170
 
 The FAPI 2.0 Security Profile is the OpenID Foundation's set of rules for APIs where a stolen token costs real money
 or privacy: open banking, health records, payments. It puts several of Quisora's features together and forbids the
-weaker options. Quisora passes the profile's certification tests for its `private_key_jwt` + DPoP variant
-([conformance](/docs/internals/conformance/)).
+weaker options. Quisora passes the profile's certification tests for its `private_key_jwt` + DPoP variant.
 
 Turn it on per client: **FAPI 2.0 Security Profile** in the client dialog (shown for **Private key JWT**), or
 `"fapi2_security_profile": true`. Other clients are unaffected.

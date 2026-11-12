@@ -67,15 +67,15 @@ size = 3                  # required, identical on every node; a write needs siz
 key = "…"                 # quisora genkey, identical on every node
 ```
 
-How the cluster behaves is in [Replication and data integrity](/docs/replication/); what an operator needs from it:
+What to know before you run one (what it does when nodes fail, and the procedures, are in [Running a gossip cluster](/docs/running/cluster-operations/)):
 
 - **Run three or five nodes.** A write needs a majority of `cluster.size` (it never shrinks): three nodes tolerate one down,
   five tolerate two. Without a majority a node is not ready: it makes no replicated write and refuses everything but its health
-  probes, the token endpoints included. ([Cluster size](/docs/replication/cluster-size/))
+  probes, the token endpoints included.
 - **When a node is lost, its partitions move within a few seconds**: writes to them wait for that (up to 5 s) and then fail with
   503; reads of what the node already has go on. A node you stop with SIGTERM hands over at once.
 - **A starting node** serves only `/healthz` and `/readyz` until it has caught up and been stable for a few seconds. Restart
-  nodes one at a time; restarting all of them at once needs nothing special. ([Node states](/docs/replication/node-states/))
+  nodes one at a time; restarting all of them at once needs nothing special. ([Node states](/docs/running/cluster-operations/#node-states))
 - **A node with a new or restored database copies everything** from a majority of the *other* nodes before it takes part (both
   others of three). While another node is down as well it waits, resynchronising; `quisora force-start` (see below) is the
   operator accepting that it copies from whichever nodes answer. (A cluster of two needs only the other node.)
@@ -92,7 +92,7 @@ How the cluster behaves is in [Replication and data integrity](/docs/replication
   until that has passed. A node that shuts down cleanly releases its id at once. A gossip node does not use the record:
   each has its own database (queued items are in it), and a database two gossip nodes share is refused (above).
 - **Clocks** must be in sync (NTP); more than 5 s apart is a broken node, and gossip refuses packets more than two minutes off
-  the receiver's clock. ([Clocks](/docs/replication/clocks/))
+  the receiver's clock.
   Nodes that share one database without gossip have no peers to compare with, but they stamp expiries (a 60 s
   `request_uri`, a 60 s code, short-lived state, the housekeeping lease) with their own clocks, so a node whose clock is
   off sees them expire early or late: sign-ins fail on one node and work on another. Each therefore reads the database
@@ -115,7 +115,7 @@ New cluster:
 Replacing a node: start the replacement with an empty database and the same configuration. It copies everything.
 
 After a lost disk with another node also down (`quisora force-start`), changing the size, and what each refusal means:
-[Replication, operator procedures](/docs/replication/operator-procedures/).
+[Running a gossip cluster](/docs/running/cluster-operations/).
 
 ## Rotating the cluster key
 
