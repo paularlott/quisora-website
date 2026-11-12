@@ -1,29 +1,26 @@
 ---
 title: "Running Quisora"
 linkTitle: "Running Quisora"
-description: "Every setting, storage backends, clusters, the audit log, backups, upgrades and monitoring."
+description: "Install, configure, back up, upgrade, monitor and cluster a Quisora server."
 weight: 100
 ---
 
-How to run Quisora on each storage backend, alone or as a cluster, with or without VictoriaLogs.
+This section is for the person who runs the server: first start, settings, storage, keys, backups, upgrades, clusters
+and monitoring. Day-to-day administration happens in the console and is covered in the other sections.
+
+Every server shows its management API reference at `/api-docs/`. Most of what the console does can be done there too.
 
 ## In this guide
 
-- [Settings](/docs/running/settings/)
 - [First start](/docs/running/first-start/)
-- [Signing keys](/docs/running/signing-keys/)
-- [The system overview](/docs/running/the-system-overview/)
-- [Sign-in, applications and incidents](/docs/running/sign-in-applications-and-incidents/)
-- [Limits and denied addresses](/docs/running/limits-and-denied-addresses/)
+- [Settings](/docs/running/settings/)
+- [Storage](/docs/running/storage/)
+- [The System page](/docs/running/system-page/)
 - [Rotating the master key](/docs/running/rotating-the-master-key/)
-- [The primary organization](/docs/running/the-primary-organization/)
-- [Storage backends](/docs/running/storage-backends/)
+- [Backup and restore](/docs/running/backup-and-restore/)
+- [Upgrading](/docs/running/upgrading/)
 - [Clustering](/docs/running/clustering/)
 - [Running a gossip cluster](/docs/running/cluster-operations/)
 - [Audit log](/docs/running/audit-log/)
-- [Docker](/docs/running/docker/)
-- [Backup and restore](/docs/running/backup-and-restore/)
-- [Upgrading](/docs/running/upgrading/)
-- [Email](/docs/running/email/)
-- [Health and monitoring](/docs/running/health-and-monitoring/)
+- [Health and monitoring](/docs/running/monitoring/)
 - [Sizing](/docs/running/sizing/)

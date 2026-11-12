@@ -1,88 +1,127 @@
 ---
 title: "Settings"
-weight: 10
+description: "Where settings live, the ones every server needs, limits, TLS, email and reloading without a restart."
+weight: 20
 ---
 
-Every setting is a flag, an `QUISORA_*` environment variable or a key in a TOML file; a flag beats the environment,
-which beats the file. The public URL, for example, is `--public-url`, `QUISORA_PUBLIC_URL` or `server.public_url`.
+Every setting is a flag, a `QUISORA_*` environment variable or a key in a TOML file. A flag beats the environment, which
+beats the file. The public URL, for example, is `--public-url`, `QUISORA_PUBLIC_URL` or `server.public_url`.
 
 - The file is `--config` (`QUISORA_CONFIG`), else `quisora.toml` in the current directory, `~/.config/quisora/` or
   `/etc/quisora/`. Unknown keys are refused.
-- `quisora serve --help` lists every setting with its variable and key; [quisora.toml.example](https://github.com/paularlott/quisora/blob/main/quisora.toml.example) is
-  an annotated file.
-- The other commands take as flags only the settings they use (`quisora <command> --help`), and refuse the rest on the
-  command line. `--config`, `--log-level` and `--log-format` are taken by every command. Every command reads the same
-  config file and environment as serve, whole, and checks it the same way.
+- `quisora serve --help` lists every setting with its variable and key.
+  [quisora.toml.example](https://github.com/paularlott/quisora/blob/main/quisora.toml.example) is an annotated file.
+- Other commands take only the settings they use (`quisora <command> --help`). They all read the same config file and
+  environment as `serve`.
 - `quisora genkey` prints a key for `server.master_key`, `cluster.key` and `storage.badgerdb.encryption_key`.
-- Secrets (the master key and previous master keys, `cluster.key` and `cluster.previous_keys`, database DSNs and passwords, the SMTP password,
-  `storage.badgerdb.encryption_key`, `server.restore_password`, a VictoriaLogs URL with credentials) belong in the config
-  file or the environment. Given as flags they are accepted, but anyone on the machine can read them in the process
-  list (`ps`), so every command prints a warning naming the variable and key to use instead. (The Taskfile's
-  development tasks pass a development key as a flag on purpose.) Any of them can instead name a value in HashiCorp
-  Vault or 1Password: [secret stores](/docs/security/secret-stores/).
 
-Settings every deployment sets:
+{{< tip "warning" >}}
+Put secrets in the config file or the environment, not in flags. Anyone on the machine can read flags in the process
+list. Secrets are the master keys, `cluster.key`, database passwords, the SMTP password, `storage.badgerdb.encryption_key`
+and `server.restore_password`. Any of them can instead name a value in Vault or 1Password
+([secret stores](/docs/security/secret-stores/)).
+{{< /tip >}}
 
-| Setting                             | Flag                      | Notes                                                                                                                                                              |
-| ----------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `server.public_url`                 | `--public-url`            | The address users reach, and the base of every organization's issuer (`<public_url>/o/<org id>`). https only.                                                                                                                |
-| `server.listen`                     | `--listen`                | Default `:8443`. HTTPS only; there is no plain-HTTP listener.                                                                                                      |
-| `server.data_dir`                   | `--data-dir`              | Everything the node keeps on disk ([layout](/docs/running/settings/#the-data-directory)). Required; default `data`. One per node.                                                         |
-| `server.master_key`                 | `--master-key`            | Seals secrets at rest. Required (identical on every node of a cluster); nothing is generated or kept in the data directory. Keep it safe, apart from the data and the backups. |
-| `server.previous_master_keys`       | `--previous-master-keys`  | Earlier master keys, only while [rotating the master key](/docs/running/rotating-the-master-key/). Identical on every node.                                                     |
-| `server.tls_cert`, `server.tls_key` | `--tls-cert`, `--tls-key` | PEM files. Without them a self-signed certificate is generated in `<data-dir>/tls`. A renewed certificate is used without a restart ([TLS certificates](/docs/running/settings/#tls-certificates)). |
+## Settings every server needs
+
+| Setting | Flag | Notes |
+| --- | --- | --- |
+| `server.public_url` | `--public-url` | The address users reach. Every organization's issuer is `<public_url>/o/<org id>`. https only. |
+| `server.listen` | `--listen` | Default `:8443`. HTTPS only. |
+| `server.data_dir` | `--data-dir` | Where the node keeps its files. Default `data`. One per node. |
+| `server.master_key` | `--master-key` | Seals secrets at rest. Required, and identical on every node. Keep it safe, apart from the data and backups. |
+| `server.previous_master_keys` | `--previous-master-keys` | Earlier keys, only while [rotating the master key](/docs/running/rotating-the-master-key/). |
+| `server.tls_cert`, `server.tls_key` | `--tls-cert`, `--tls-key` | PEM files. Without them a self-signed certificate is made in `<data-dir>/tls`. |
+
+Sessions, tokens and sign-in settings are described in their own guides ([sign-in](/docs/sign-in/),
+[applications](/docs/applications/)). A few are only server defaults that an organization can override in the console
+(**Organizations**, edit): `limits.password_min_length`, `limits.lockout_attempts`, `limits.lockout_minutes`,
+`limits.grants_per_user`, `tokens.api_token_max_days`, `session.privileged_ttl` and `session.privileged_idle`.
 
 ## The data directory
 
-`server.data_dir` is the one place a node keeps files; nothing is written anywhere else. Put it on persistent storage,
-readable only by the user Quisora runs as (it is created with mode 0700). Each node of a cluster has its own: never
-share one between nodes or processes.
+`server.data_dir` is the only place a node writes files. Put it on persistent storage that only the Quisora user can
+read (it is created with mode 0700). Each node of a cluster has its own. Never share one between nodes.
 
-| In `<data-dir>`      | What                                                                                                   |
-| -------------------- | ------------------------------------------------------------------------------------------------------ |
-| `badgerdb/`          | The store, with `storage.backend = "badgerdb"` (the default).                                          |
-| `quisora.db`         | The store, with `storage.backend = "sqlite"`.                                                          |
-| `tls/`               | The self-signed certificate, when `server.tls_cert` is not set.                                        |
-| `auditspool/`        | Audit events VictoriaLogs has not taken yet, with `audit.victorialogs_url` set ([Spool](/docs/running/audit-log/#spool)).       |
-| `node_id`, `cluster-state.json`, markers | The node's identity (made at its first start in every mode, unless `cluster.node_id` sets it: its queued emails and back-channel logouts are its own by it, [Queued work](/docs/running/settings/#queued-work)) and cluster bookkeeping: whether its database's partition state can be trusted, which data set it holds (its genesis: trusted only for the database it was saved for), whether it has formed in its cluster, a forced start not yet audited (`cluster-state.json`); the one-shot markers `force-start` and `restore-incomplete`; `restore-audit.json` (restores not yet in the audit log). |
+| In the data directory | What |
+| --- | --- |
+| `badgerdb/` or `quisora.db` | The store, for the BadgerDB (default) or SQLite backend. |
+| `tls/` | The self-signed certificate, when you set none. |
+| `auditspool/` | Audit events VictoriaLogs has not taken yet ([Audit log](/docs/running/audit-log/#when-victorialogs-is-down)). |
+| `node_id`, `cluster-state.json` and small marker files | The node's identity and cluster bookkeeping. |
 
-Nothing else is written there. In particular a gossip node does not spool what it sends another node that is catching up:
-the stream goes from the database to the other node's database with no file in between (an `export-*.tmp` file here is left by an older build
-that crashed during a catch-up: nothing reads or deletes it, and it can be removed by hand).
-
-Backups do not need the data directory (they come from the store: [Backup and restore](/docs/running/backup-and-restore/)), but
-restoring a node without it gives it a new identity, and audit events still spooled in it are lost; so are the emails
-and back-channel logouts its store holds queued for it (they are its own by its id: no other node, nor the node under
-its new id, sends them).
-
-## Queued work
-
-Email ([Email](/docs/running/email/)) and the back-channel logouts an application did not take are queued in the store, as records of
-the node that queued them: sealed with the master key, written before the request answers, and kept across restarts
-and crashes. Only that node sends them; nothing else reads them. They are never backed up or replicated: with gossip
-each node's are in its own database, and on a shared database every node holds its own there, apart from the others'.
-A node that is gone for good leaves its items unsent: each is discarded (it expires, and the purge removes it) a day
-after its last retry would have been, by when it is worth nothing (its retries are over, and an invitation it carries
-lasts 7 days). Each node's caps (10,000 emails and 10,000 logouts, 2,500 of each of one organization) and gauges count
-its own items only. Being the only node that writes its items, a node keeps an index of them in memory, read from the
-store once at start: choosing what to send next and checking the caps cost no reads of the store, however many sent
-items it still holds until its purge. A message or logout that was sent but whose end the store did not record (a
-full disk, a database turned read-only) is not sent again: the node records its end again every minute until the
-store takes it (only a restart before then sends it once more).
+Backups do not need the data directory, but restoring a node without it gives it a new identity. Audit events still
+waiting in `auditspool/`, and the emails and back-channel logouts the node had queued, are lost with it.
 
 ## TLS certificates
 
-With `server.tls_cert` and `server.tls_key` set, Quisora looks at the two files every hour and switches to a renewed
-certificate (certbot, cert-manager or a script replacing them): new connections get the new certificate, open ones
-carry on. `kill -HUP` loads it at once; make it the renewal hook to switch straight away. A pair that does not load, such as a certificate
-written before its key, or a key that does not match, leaves the current certificate in use, is logged
-(`TLS certificate not reloaded`) and is tried again at the next check. Without them, the self-signed certificate in
-`<data-dir>/tls` is replaced before it expires.
+With `server.tls_cert` and `server.tls_key` set, Quisora checks the two files every hour and switches to a renewed
+certificate without a restart. New connections get the new certificate and open ones carry on. `kill -HUP` loads it at
+once, so make that your renewal hook. If a pair does not load (a certificate written before its key, a key that does
+not match), the current certificate stays in use and the next check tries again.
 
 ## Stopping
 
-On SIGTERM or SIGINT a node stops taking new requests, lets those in flight finish, then closes. When something has
-been polling `/readyz` in the last two minutes (a load balancer, an orchestrator), `/readyz` first answers 503
-(`"status": "draining"`) for `server.shutdown_drain` seconds (default 10) while the node still serves, so traffic
-moves to other nodes before it goes. Then requests in flight get `server.shutdown_timeout` seconds (default 30). Make
-the orchestrator's stop timeout longer than the two together. A node nobody polls stops without the wait.
+On SIGTERM or SIGINT a node stops taking new requests, lets those in flight finish, then closes. If a load balancer or
+orchestrator has polled `/readyz` in the last two minutes, `/readyz` first answers 503 (`draining`) for
+`server.shutdown_drain` seconds (default 10) so traffic moves away. Requests in flight then get
+`server.shutdown_timeout` seconds (default 30). Make your orchestrator's stop timeout longer than the two together.
+
+## Email
+
+With `mail.smtp_host` set, Quisora emails invitations, password resets and address confirmations. Without it nothing is
+emailed: administrators share invitation links themselves and there is no self-service password reset. What the emails
+say is set per organization ([Email templates](/docs/branding/emails/)).
+
+- Mail is queued on the node before the request answers, and survives a restart. A message the mail server does not
+  take is retried after 1, 5, 30 and 120 minutes, then given up and logged.
+- A message whose code or link has expired by its turn is dropped, not sent.
+- A node holds at most 10,000 messages, and one organization at most 2,500. Past that, new ones are refused.
+- Mail and back-channel logouts are queued per node. A node that is gone for good leaves its queue unsent.
+- Watch `quisora_mail_queued`: growing means the mail server is not taking mail.
+
+## Limits and denied addresses
+
+| Setting | Default | What | Applies |
+| --- | --- | --- | --- |
+| `limits.max_in_flight` | 4096 | Requests in progress on a node before it answers 503 (never probes, metrics, discovery or JWKS) | Next request |
+| `limits.login_per_ip_min` | 300 | Sign-in attempts per organization and address per minute | Next attempt |
+| `limits.lockout_attempts` | 10 | Failed passwords before an account is locked (0: never) | Next attempt |
+| `limits.lockout_minutes` | 15 | How long the lock lasts | Next attempt |
+| `limits.flows_per_ip` | 50 | Unfinished sign-ins one address may hold (0: no cap) | Next sign-in |
+| `limits.org_failures_per_minute` | 100 | Failed passwords per organization per minute before it counts as [under a spray](/docs/security/running-securely/#lockout-and-password-spraying) (0: never) | Next attempt |
+| `limits.password_min_length` | 15 | Shortest password accepted (8 to 64) | Next password |
+| `limits.grants_per_user` | 1000 | Refresh grants one user may hold | Next grant |
+| `limits.password_workers` | CPUs | Passwords hashed at once | Restart |
+| `limits.ephemeral_mb` | 1024 | Memory for short-lived sign-in state | Restart |
+| `server.deny_networks` | none | Client addresses refused | Next request |
+
+`server.deny_networks` lists IP addresses and CIDR ranges, such as `["203.0.113.7", "198.51.100.0/24"]`. Their requests
+get a bare 403 before anything else happens, with no log line or audit event, so a flood costs the node little.
+Probes and `/metrics` still answer every address. Behind a proxy, set `server.trust_proxy` so the real client address
+is used. The list is for a handful of networks: for a botnet, block upstream in a firewall or proxy.
+
+### Changing settings without a restart
+
+A reload re-reads the master keys, the cluster keys and size, the limits and `server.deny_networks` from the config
+file. Nothing else is reloaded, and values given as flags or environment variables cannot change while the server runs.
+
+- **One node:** `kill -HUP <pid>` (systemd: `systemctl reload quisora`; Docker: `docker kill --signal HUP quisora`).
+- **A cluster, or nodes using `cluster.notify`:** edit every node's file, then use **Reload configuration** on the
+  System page ([The System page](/docs/running/system-page/)). Each node reads its own file.
+- A file that does not parse, or has a bad value, fails the reload and nothing changes. The log says
+  `configuration not (fully) reloaded` with the reason.
+- Counters are kept, so tightening a limit mid-attack works at once. A restart resets them, which hands an attacker
+  fresh budgets.
+
+### Under attack
+
+1. Find the source. The audit events (`login.limited`, `login.failure`, `oauth.client_auth.limited`,
+   `api.request.refused`) and the access log show the address (`ip`).
+2. Add the address or network to `server.deny_networks` in every node's file and reload. `quisora_http_denied_total`
+   should start counting.
+3. If it moves around, lower `limits.login_per_ip_min`, `limits.lockout_attempts` or `limits.max_in_flight` the same
+   way. Reload rather than restart.
+4. For many addresses, block them upstream.
+5. When it is over, take the entries out and reload again. The account steps are in
+   [Running Quisora securely](/docs/security/running-securely/).

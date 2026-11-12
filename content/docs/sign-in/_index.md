@@ -1,173 +1,80 @@
 ---
 title: "Signing in to Quisora"
 linkTitle: "Signing in"
-description: "Passkeys, sign-in providers, recovery codes, codes by email, sessions and protecting administrators."
+description: "Passwords, passkeys, second factors, upstream providers, sessions and protecting administrators."
 weight: 120
 ---
 
-How people sign in to Quisora, and the rules that protect their accounts. (How applications sign people in through
-Quisora is in [Connecting applications](/docs/applications/).)
-
-## The guides
-
-| | |
-| --- | --- |
-| [Passkeys](/docs/sign-in/passkeys/) | Fingerprint, face or device PIN instead of a password; a passkey counts as two factors |
-| [Upstream providers](/docs/sign-in/providers/) | "Continue with" Google, Microsoft, GitHub, GitLab, Auth0 or your own single sign-on |
-| [Recovery codes](/docs/sign-in/recovery-codes/) | One-time codes for when the second factor is not at hand |
-| [Codes by email](/docs/sign-in/email-codes/) | A second factor by email, for organizations that allow it |
-| [SSH certificates](/docs/ssh/) | Signing in to servers with a short-lived certificate, after a second-factor sign-in |
-| [Emergency sign-out and lock-out](/docs/security/emergency-sign-out/) | Ending everyone's sessions at once, or one person's access |
+This section is about how people sign in to Quisora and the rules that protect their accounts. (How applications sign
+people in through Quisora is in [Connecting applications](/docs/applications/).)
 
 ## Where people sign in
 
-Organizations are self-contained: each has its own address space, `/o/<org>/`, where `<org>` is the organization's id
-(22 letters and digits, in which case matters: the form every link Quisora makes uses) or its
-name (a name can never be an id, and `o` is reserved).
-The sign-in page is `/o/<org>/login`, with `/o/<org>/account`, `/o/<org>/invite`, `/o/<org>/reset`,
-`/o/<org>/verify-email` and `/o/<org>/logout` beside it; the links in invitation, reset and verification emails are
-`/o/<org id>/…`. `https://id.example.com/` signs no one in: it tells a signed-out visitor to start from their application or
-their organization's sign-in link, as does a page that does not exist, or an organization's when there is no such
-organization (a 404). It carries the primary organization's logo and colour, if it has them. Signed in, it is the
-account page. Administrators of the primary organization sign in at `/admin`.
+Each organization has its own sign-in page at `/o/<org>/login`, where `<org>` is the organization's name or its id.
+Your applications send people there, so most people never type it. The account page is `/o/<org>/account`.
 
-A browser keeps one session per organization (a cookie of its own for each): being signed in to one organization is not
-being signed in to another. The console (`/admin`) and the management API (`/api`) are the server's, not an
-organization's: they use the session of the organization they administer if the browser has one, otherwise the primary
-organization's (super admins), otherwise any other.
+{{< screenshot name="login" alt="An organization's sign-in page with two Continue with buttons, a passkey button and an email field" class="max-w-3xl" >}}
+
+Visiting `https://id.example.com/` itself signs no one in: it tells a signed-out visitor to start from their
+application or their organization's sign-in link. Administrators of the primary organization sign in at `/admin`.
+
+A browser keeps one session per organization. Being signed in to one organization is not being signed in to another.
 
 ## Ways to sign in
 
-Each organization chooses its methods (super admins: **Organizations** → **Edit** → **Sign-in methods**), and each
-tenant can narrow them for its applications, never widen them:
+Each organization chooses its methods. A super admin opens **Organizations**, **Edit**, then **Sign-in methods**. Each
+tenant can narrow the methods for its applications, never widen them: open the tenant and choose **Edit sign-in
+rules**.
 
-- **Password** (with **Allow password reset**: a reset link by email). Users choose their passwords themselves,
-  through an invitation; administrators never set them.
-- **Passkeys**: as the whole sign-in, or as the second factor after a password. [More](/docs/sign-in/passkeys/).
-- **Upstream providers**: each tenant offers all of the organization's providers or a chosen few.
-  [More](/docs/sign-in/providers/).
+{{< screenshot name="sign-tenant-rules" alt="The Edit sign-in rules dialog of a tenant: who can sign in, sign-in methods and providers" class="max-w-2xl" >}}
 
-New users get an **invitation link** (shown to the administrator, or emailed when the server sends email), valid for 7
-days and once, with which they set a password, create a passkey, or both. A user has one invitation at a time: a new
-one replaces the last. The link keeps working until the set-up completes, so a failure part-way (a network error, a
-password the policy refuses) is simply tried again. An accepted invitation replaces every way the user signed in
-before, all at once (a passkey, connected provider, API token or session from before stops working at the moment it
-is accepted), so it is also how someone who lost everything gets back in.
+| Method | What it is |
+| --- | --- |
+| **Password** | Users choose their own passwords through an invitation. Administrators never set them. **Allow password reset** sends a reset link by email. |
+| **Passkey** | A fingerprint, face or device PIN, as the whole sign-in or as the second factor after a password. See [Second factors](/docs/sign-in/second-factors/#passkeys). |
+| **Providers** | "Continue with" Google, Microsoft or your own single sign-on. See [Upstream providers](/docs/sign-in/providers/). |
 
-## Second factors
+## Inviting people
 
-**Require a second factor** on the organization (or a tenant, for its applications) makes every password or provider
-sign-in also give one:
+New users get an **invitation link**. The administrator sees it, or Quisora emails it when the server sends email. It
+works once and lasts 7 days. With it the user sets a password, creates a passkey, or both.
 
-- an **authenticator app** (a 6-digit code: TOTP), which lists the account under its organization's display name;
-- a **passkey** after the password;
-- a [code by email](/docs/sign-in/email-codes/), where the organization allows it, for users with neither of the first two;
-- a [recovery code](/docs/sign-in/recovery-codes/), in place of either of the first two.
+A user has one invitation at a time: a new one replaces the last. The link keeps working until set-up is finished, so
+if something fails half way (a password the policy refuses, say), the user simply tries again.
 
-A user without a second factor sets one up during the sign-in (an authenticator app, with a passkey offered), or, where
-codes by email are allowed, gets one by email instead. **Try another way** at the second-factor step lists what else
-the account can use. Managers, administrators and super admins always need a second factor, whatever the settings,
-and the console refuses a session without one. Wrong passwords and codes count towards a temporary lock-out of the
-account.
+{{< tip "warning" >}}
+Accepting an invitation replaces every way the user signed in before, all at once: passkeys, connected providers, API
+tokens and sessions stop working. That is also how someone who lost everything gets back in.
+{{< /tip >}}
 
-Applications can also ask for a second factor for one sign-in (`acr_values=urn:quisora:acr:mfa`): see [signing users
-in](/docs/applications/sign-in/#requiring-a-second-factor).
-
-## A credential change ends what is in flight
-
-Every account has a **security generation**: a counter that moves on whenever a way into the account changes. That is when the
-password is set, changed, removed or reset; an authenticator app is set up, replaced or removed; a passkey is added,
-removed or disabled (a suspected copy); recovery codes are made or dropped; a sign-in provider is connected or
-disconnected; the account is disabled or enabled again (a lock-out, an accepted invitation). Everything in progress
-for the account is bound to the generation it started under and stops working when the generation moves on; the
-person starts again, with the account's credentials as they are now:
-
-- **a sign-in between its steps**: a password verified and the authenticator code, passkey, emailed code or recovery
-  code still to come, or the second-factor set-up for an account without one. The emergency sign-out lever ends these
-  too. A code that is right for a sign-in that has died is refused all the same;
-- **a second-factor set-up** begun at sign-in or on the account page: an authenticator secret shown before the change
-  is not confirmed against the account after it;
-- **a passkey ceremony** begun for the account (adding one, confirming with one);
-- **a re-authentication** ("Confirm it is you"), unless the change was this very browser's own: setting up an
-  authenticator app from one browser makes every other browser's confirmation ask again, now for the code;
-- **an invitation or password reset link**: a reset link mailed before the password was changed, or an invitation
-  issued before the user set up a passkey, opens nothing. (A verification link only proves an address, and works
-  while that address is still on the account.)
-
-Setting up a second factor at sign-in is only ever for an account that has none. Two browsers holding the same
-password cannot each set one up: the first to finish moves the generation on, and the second is sent back to sign in,
-where the factor that won now stands between it and a session. The write that sets a factor is a compare-and-swap on
-the user (confirmed by a majority of the cluster), so two finishing at the same moment still end with exactly one.
-
-A change of role, address or end date is not a credential change: each step judges those afresh from the account as
-it is (whether a second factor is required, whether codes by email are allowed, whether the account is still enabled),
-so an invitation for someone who was promoted after it went out is judged on the invitation rules, not simply dead.
+When someone changes a way into their account (a password, authenticator app, passkey, recovery codes or a connected
+provider), anything half done for that account stops working and they start again. That includes a sign-in waiting for
+its second factor, and unused invitation and reset links.
 
 ## Sessions
 
-Browser sessions last `session.ttl` from sign-in (7 days) and end after `session.idle` unused (24 hours). An
-organization may set shorter ones on its settings, never longer. Managers and above get the organization's own
-lengths for them, else `session.privileged_ttl` (12 hours) and `session.privileged_idle` (1 hour), when those are
-shorter. The primary organization's settings (methods,
-second factor, session lifetimes) cover the super admins, so only super admins change them.
+Browser sessions last 7 days from sign-in and end after 24 hours without use. An organization can set shorter
+lengths on its settings, never longer. Managers and above get 12 hours, and 1 hour unused, when those are shorter. The
+primary organization's settings cover the super admins, so only super admins change them.
 
-Users see their sessions of the organization on their account page and can end any of them; administrators can end a user's sessions
-from the user's page. Changing a password signs the user out of every other browser and device.
+Users see their sessions on their account page and can end any of them. Administrators can end a user's sessions from
+the user's page. Changing a password signs the user out everywhere else.
 
-**Signing out and ending a session are not the same.** What goes with the session depends on how it ends:
+Signing out and ending a session are not the same:
 
-| | Signing out (the sign-out page, an application's logout, another user signing in in the same browser) | Ending it from another session or by an administrator, signing out everywhere, a lock-out |
+| | Signing out of this browser | Ending a session from elsewhere, signing out everywhere, a lock-out |
 | --- | --- | --- |
 | The browser session | ends | ends |
 | Applications' sign-ins without `offline_access` | end | end |
-| Applications' sign-ins with `offline_access` | go on, to their own expiry | end |
-| [SSH certificates](/docs/ssh/revoking-and-rotating/) issued in it, or to `quisora ssh` through it | go on, to their expiry | revoked |
+| Applications' sign-ins with `offline_access` | go on until they expire | end |
+| [SSH certificates](/docs/ssh/revoking-and-rotating/) issued in the session | go on until they expire | are revoked |
 
-Signing out is the user leaving this browser; ending a session is taking back what it gave, as for a session someone
-else may hold. "Sign out all other sessions" ends the others in that way and keeps the current one with everything it
-gave.
+To end everyone's sessions at once, or lock one person out, see
+[Emergency sign-out and lock-out](/docs/security/emergency-sign-out/).
 
-## Confirming it is you
+## In this guide
 
-**Sensitive changes** need a recent re-authentication (signed in or confirmed within 5 minutes; the console asks with
-its **Confirm it is you** dialog), and a personal API token can never make them, through the management API or SCIM (a
-[service account](/docs/automation/service-accounts/) is not asked: it makes only what its scopes allow, with `manage_admins` for
-administrators):
-
-- deleting an organization;
-- rotating the signing keys;
-- changing the primary organization's sign-in settings;
-- making someone an administrator or super admin, or creating one;
-- demoting, disabling or deleting another administrator or super admin (management API only: a directory offboarding
-  an administrator through SCIM still can, within the service's rules: it never touches a super admin);
-- removing another user's password, authenticator app or passkey, or unlinking a sign-in provider from them;
-- issuing an invitation for a manager or administrator (an accepted invitation replaces every way they sign in);
-- creating or changing a service account, or rotating its secret;
-- changing an organization's email templates ([Email templates](/docs/branding/emails/)).
-
-**Account changes** (a passkey, the authenticator app, recovery codes, the primary address, connecting a sign-in
-provider, an API token, signing out other sessions) need a re-authentication too, or a sign-in within 5 minutes that used the account's own second
-factor. A sign-in through a provider trusted for the second factor does not count when the account has one of its own,
-and an account whose second factor is a passkey confirms with the passkey, not the password alone. A
-[recovery code](/docs/sign-in/recovery-codes/#confirming-it-is-you) stands in for a lost authenticator app or passkey here too.
-
-## Protecting administrators
-
-- **Resetting an administrator's sign-in is a super admin's change.** Sending an established manager or administrator
-  a new invitation, removing their password or authenticator app, lowering their role, changing their primary email address (where
-  password resets go), or adding a linked address to their account, verified or not (its verification link goes to
-  the address added), needs a super admin. A manager or administrator who has not signed in yet gets the next
-  invitation only from whoever issued the current one (the same person or service account), or from a super admin. So one administrator cannot take over
-  another's account.
-- **Not linked by email.** Upstream providers never link a manager's or administrator's account by its email address:
-  they connect the provider themselves ([providers](/docs/sign-in/providers/#who-signs-in-as-whom)).
-- **No codes by email** and **no trusted provider second factor** for them: they always give their own.
-- **Who may remove a super admin.** Nobody demotes, disables, locks out, end-dates or deletes themselves (nor changes their
-  own end date), and only a super admin does any of that to a super admin: an administrator, a manager or a service account
-  cannot. The system never does either (the sweep that disables accounts past their end date skips super admins; their end
-  date still stops sign-in). These are rules about who acts on whom, not a count: there is no guarantee that a super admin
-  always remains. Two super admins removing each other at the same moment on different nodes can leave none, as can an end
-  date passing on the last one; `quisora invite --break-glass --super-admin primary <email>` recovers (see below).
-  Organizations need no administrator of their own: super admins administer every one, so an organization's last
-  administrator can be demoted or removed.
-- **Locked out of the console entirely**: the [break-glass procedure](/docs/security/running-securely/#incident-response).
+- [Second factors](/docs/sign-in/second-factors/): passkeys, authenticator apps, recovery codes and codes by email
+- [Upstream providers](/docs/sign-in/providers/): Google, Microsoft, GitHub, GitLab, Auth0 and your own single sign-on
+- [Guest accounts](/docs/sign-in/guest-accounts/): letting the people of one organization into another
+- [Protecting administrators](/docs/sign-in/protecting-administrators/): re-authentication and the extra rules for administrators

@@ -58,6 +58,6 @@ Codes by email are weaker than the others, since anyone who can read the mailbox
 
 ## More
 
-- [Passkeys in depth](/docs/sign-in/passkeys/)
-- [Recovery codes](/docs/sign-in/recovery-codes/)
-- [Codes by email](/docs/sign-in/email-codes/)
+- [Passkeys in depth](/docs/sign-in/second-factors/#passkeys)
+- [Recovery codes](/docs/sign-in/second-factors/#recovery-codes)
+- [Codes by email](/docs/sign-in/second-factors/#codes-by-email)
