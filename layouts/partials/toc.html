@@ -22,8 +22,8 @@
 
 {{- if gt (len $headingData) 1 -}}
 <aside class="hidden xl:block w-56 flex-shrink-0" aria-label="On this page">
-  <div class="sticky top-24 max-h-[calc(100dvh-7.5rem)] overflow-y-auto hide-scrollbar">
-    <div class="glass p-4">
+  <div class="glass sticky top-24 max-h-[calc(100dvh-7.5rem)] flex flex-col overflow-hidden">
+    <div class="min-h-0 overflow-y-auto hide-scrollbar p-4">
       <p class="text-xs font-bold uppercase tracking-widest text-muted mb-3">On this page</p>
       <nav id="toc-nav" class="space-y-0.5 border-l border-edge">
         {{- range $headingData -}}

@@ -1,7 +1,10 @@
-<aside class="hidden lg:block w-64 flex-shrink-0">
-  <div class="glass sticky top-24 max-h-[calc(100dvh-7.5rem)] overflow-y-auto hide-scrollbar nav-container p-3">
-    <nav aria-label="Docs">
-      {{ partial "navigation.html" (dict "mobile" false "context" .) }}
-    </nav>
+<aside class="hidden lg:block w-64 flex-shrink-0 pb-10">
+  {{- /* The glass card stays put and the inner box scrolls, so the card's rim and sheen don't move with the links. */}}
+  <div class="glass sticky top-24 max-h-[calc(100dvh-7.5rem)] flex flex-col overflow-hidden">
+    <div class="nav-container min-h-0 overflow-y-auto hide-scrollbar p-3">
+      <nav aria-label="Docs">
+        {{ partial "navigation.html" (dict "mobile" false "context" .) }}
+      </nav>
+    </div>
   </div>
 </aside>
