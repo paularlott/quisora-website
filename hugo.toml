@@ -10,7 +10,6 @@ disableKinds = ['taxonomy', 'term']
 
 [params]
   githubURL = "https://github.com/paularlott/quisora"
-  docsURL = "https://github.com/paularlott/quisora/blob/main"
   copyright = "Paul Arlott"
   defaultTheme = "light"  # Options: "light" or "dark"
   includeSections = ["docs"]
@@ -68,3 +67,8 @@ disableKinds = ['taxonomy', 'term']
     disableWatch = true
     source = 'hugo_stats.json'
     target = 'assets/notwatching/hugo_stats.json'
+
+# Keep "--" and "---" as typed (command line flags in prose), so no dashes are made up.
+[markup.goldmark.extensions.typographer]
+  enDash = '--'
+  emDash = '---'

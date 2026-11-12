@@ -1,14 +1,13 @@
 {{- /*
-  Lists the pages of a section in sidebar order with their descriptions, so
-  landing pages never fall behind the content.
-  Usage: {{< page-list section="/docs/tutorials" >}}
+  Lists a section's pages in sidebar order with their descriptions, so landing pages never fall behind the content.
+  kind="sections" lists its sub-sections instead of its pages.
+  Usage: {{< page-list section="/docs" >}} or {{< page-list section="/docs" kind="sections" >}}
 */ -}}
 {{- with site.GetPage (.Get "section") -}}
+{{- $list := cond (eq ($.Get "kind") "sections") .Sections .RegularPages -}}
 <ul>
-  {{- range .Pages.ByWeight }}
-  {{- if not (index .Params "nav-skip") }}
+  {{- range $list.ByWeight }}
   <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ with .Description }}: {{ . }}{{ end }}</li>
-  {{- end }}
   {{- end }}
 </ul>
 {{- else -}}

@@ -5,7 +5,7 @@ description: Short guides to get Quisora running and to set up the things most p
 weight: 1
 ---
 
-These guides are short on purpose. They cover what you need to get going, and link to the full guides in the Quisora repository when you want more depth.
+The guides below are short on purpose. They cover what you need to get going, and link to the full reference when you want more depth.
 
 {{< page-list section="/docs" >}}
 
@@ -22,11 +22,8 @@ A few words you will see in the guides:
 | Application | An app that signs people in through Quisora (an OAuth client). |
 | Provider | Another identity service people can sign in with, such as Google or your company's single sign-on. |
 
-## Want more depth?
+## Reference
 
-The Quisora repository has the full guides:
+The full guides, for when you need the detail.
 
-- [Running Quisora](https://github.com/paularlott/quisora/blob/main/docs/RUNNING.md): every setting, storage, clusters, backups and monitoring.
-- [Running it securely](https://github.com/paularlott/quisora/blob/main/docs/SECURITY.md): the threat model, a hardening checklist and what to do in an incident.
-- [Connecting applications](https://github.com/paularlott/quisora/blob/main/docs/oauth/README.md): OpenID Connect and OAuth 2, with curl examples.
-- [Signing in](https://github.com/paularlott/quisora/blob/main/docs/sign-in/README.md): passkeys, providers, recovery codes and codes by email.
+{{< page-list section="/docs" kind="sections" >}}

@@ -58,6 +58,6 @@ Codes by email are weaker than the others, since anyone who can read the mailbox
 
 ## More
 
-- [Passkeys in depth](https://github.com/paularlott/quisora/blob/main/docs/sign-in/passkeys.md)
-- [Recovery codes](https://github.com/paularlott/quisora/blob/main/docs/sign-in/recovery-codes.md)
-- [Codes by email](https://github.com/paularlott/quisora/blob/main/docs/sign-in/email-codes.md)
+- [Passkeys in depth](/docs/sign-in/passkeys/)
+- [Recovery codes](/docs/sign-in/recovery-codes/)
+- [Codes by email](/docs/sign-in/email-codes/)

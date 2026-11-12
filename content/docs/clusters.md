@@ -67,5 +67,5 @@ Don't restart a node just because it isn't ready. A node catching up is still al
 
 ## More
 
-- [Clustering in depth](https://github.com/paularlott/quisora/blob/main/docs/RUNNING.md#clustering)
-- [How replication works](https://github.com/paularlott/quisora/blob/main/docs/REPLICATION.md), with what to do when nodes are lost
+- [Clustering in depth](/docs/running/clustering/)
+- [How replication works](/docs/replication/), with what to do when nodes are lost

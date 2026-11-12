@@ -62,4 +62,4 @@ Try a restore now and then, into a spare server. A backup nobody has restored is
 
 ## More
 
-The [full backup guide](https://github.com/paularlott/quisora/blob/main/docs/RUNNING.md#backup-and-restore) covers large stores, clusters and SSH certificates after a restore.
+The [full backup guide](/docs/running/backup-and-restore/) covers large stores, clusters and SSH certificates after a restore.

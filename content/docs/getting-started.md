@@ -92,4 +92,4 @@ quisora invite primary admin@example.com
 
 - [Configuration basics](/docs/configuration/) for a real address, certificate and database.
 - [Sign-in providers](/docs/sign-in-providers/) to let people use an account they already have.
-- [Connecting applications](https://github.com/paularlott/quisora/blob/main/docs/oauth/README.md) to sign people in to your apps.
+- [Connecting applications](/docs/applications/) to sign people in to your apps.

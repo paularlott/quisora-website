@@ -50,9 +50,9 @@ The full API reference is on your own server at `/api-docs`.
 Tokens last at most 365 days unless a super admin sets a different limit for the organization.
 
 {{< tip >}}
-For automation that shouldn't depend on one person, use a [service account](https://github.com/paularlott/quisora/blob/main/docs/SERVICE-ACCOUNTS.md) instead. It belongs to the organization, not to a user.
+For automation that shouldn't depend on one person, use a [service account](/docs/automation/service-accounts/) instead. It belongs to the organization, not to a user.
 {{< /tip >}}
 
 ## More
 
-The [full API tokens guide](https://github.com/paularlott/quisora/blob/main/docs/API-TOKENS.md) covers SCIM, importing users, and checking `api` tokens from your own apps.
+The [full API tokens guide](/docs/automation/api-tokens/) covers SCIM, importing users, and checking `api` tokens from your own apps.

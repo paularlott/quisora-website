@@ -250,6 +250,7 @@
   color: var(--fg); text-decoration: none;
 }
 .nav-link:hover { background: var(--ctl-hover); }
+.nav-sub { font-size: 0.85rem; font-weight: 550; padding: 0.35rem 0.65rem; border-radius: 0.8rem; }
 .nav-link.active-nav-item { background: var(--nav-current-bg); color: var(--on-accent); box-shadow: var(--nav-current-shadow); }
 .nav-group {
   margin: 1rem 0.75rem 0.4rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
@@ -355,6 +356,7 @@ mark { background: var(--mark-bg); color: inherit; border-radius: 0.2rem; }
   font-family: var(--font-mono);
   font-size: 0.875em;
   font-weight: 500;
+  overflow-wrap: break-word;
 }
 :where(code):not(:where(.code-block code)):before,
 :where(code):not(:where(.code-block code)):after {

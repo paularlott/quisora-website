@@ -92,7 +92,7 @@ default_theme = "system"   # light, dark or system
 
 ## Before you go live
 
-A short list. The [security guide](https://github.com/paularlott/quisora/blob/main/docs/SECURITY.md#hardening-checklist) has the full one.
+A short list. The [security guide](/docs/security/running-securely/#hardening-checklist) has the full one.
 
 - Keep the master key in a secret store, away from the data and backups.
 - Use a real certificate.

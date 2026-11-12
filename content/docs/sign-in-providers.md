@@ -55,4 +55,4 @@ Want people's sessions to end when they leave the company? Add the `offline_acce
 
 ## More
 
-The [full providers guide](https://github.com/paularlott/quisora/blob/main/docs/sign-in/providers.md) covers guest accounts from another organization, how leavers are spotted, and setting providers up through the API.
+The [full providers guide](/docs/sign-in/providers/) covers guest accounts from another organization, how leavers are spotted, and setting providers up through the API.
