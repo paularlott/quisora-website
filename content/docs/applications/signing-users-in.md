@@ -60,6 +60,7 @@ refresh grant and, for a long life, `offline_access`).
 - **Access token**: a JWT for APIs. Its `aud` is the client, plus any resources.
 - **ID token**: who signed in, for your app. Check its signature, `iss`, `aud` (your client ID), `exp` and `nonce`.
   `amr` says how the user signed in (`pwd`, a passkey, `otp`, `mfa` for two factors, `fed` for an upstream provider).
+  It shows a second factor only when Quisora checked one itself or trusts the provider's, never on a provider's word.
   `acr` is `urn:quisora:acr:mfa` when a second factor was used.
 
 A code used a second time fails, and everything issued from it is revoked.

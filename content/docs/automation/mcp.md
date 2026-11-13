@@ -42,6 +42,8 @@ The AI client then finds Quisora from the protected resource document, registers
 - Turning off **Allow self-registered apps** or removing the resource stops the apps' refresh tokens at once.
   An MCP server that verifies JWTs itself accepts an access token until it expires (10 minutes by default).
 - A registration nobody signs in with is removed after a day, and registration is rate limited per address.
+- An organization holds at most 10,000 apps nobody has used yet. At that limit, a new registration removes one of them
+  at random, so a flood can't stop others registering. Apps people use are never removed.
 
 ## Seeing and removing them
 

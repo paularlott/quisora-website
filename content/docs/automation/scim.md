@@ -41,6 +41,9 @@ replace through a filter that matches nothing creates the value, and attributes 
 - Creating, renaming, retagging or deleting a group, anything done to a manager or administrator, and setting or
   changing a user's `externalId` need an administrator's token (or a service account with `manage_admins` for
   administrators). A manager's replace that sends the `externalId` a user already has goes through.
+- A personal API token, even an administrator's, can't demote, disable, end-date or delete another administrator,
+  or make anyone an administrator. A directory that offboards administrators (Entra ID, Okta) needs a service account
+  with `manage_admins`.
 - A SCIM client never reaches a super admin.
 - A user always has a primary email address, which is their sign-in name. A request that would leave a user without
   one is refused with `invalidValue`.
