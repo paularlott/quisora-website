@@ -23,7 +23,7 @@ API or SCIM. (A [service account](/docs/automation/service-accounts/) makes only
 
 Changes to your own account (a passkey, the authenticator app, recovery codes, your primary address, connecting a
 provider, an API token, signing out other sessions) need a re-authentication too, or a sign-in within 5 minutes that
-used your own second factor. A sign-in through a provider trusted for the second factor does not count when the
+used your own second factor. That holds on the account page and through the management API alike. A sign-in through a provider trusted for the second factor does not count when the
 account has its own. An account whose second factor is a passkey confirms with the passkey. A
 [recovery code](/docs/sign-in/second-factors/#recovery-codes) stands in for a lost authenticator app or passkey.
 

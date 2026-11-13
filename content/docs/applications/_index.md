@@ -31,7 +31,7 @@ In the console, open the organization, then **Tenants**, the tenant, and **Clien
 | **Authentication** | A secret for a server-side app. **Public** for an app that cannot keep a secret (single-page, mobile, desktop, CLI). **Private key JWT** for higher assurance ([client authentication](/docs/applications/client-authentication/)). |
 | **Grant types** | **Authorization code** to sign users in, **Refresh token**, **Client credentials**, **Token exchange**, **Device sign-in**. |
 | **Redirect URIs** | Where the sign-in result goes. Use https, `http://localhost` for desktop apps, or a private scheme such as `com.example.app:/callback` for mobile apps. |
-| **Allowed scopes** | The standard scopes it may ask users for, and scopes of your own APIs. |
+| **Allowed scopes** | The standard scopes it may ask users for, and scopes of your own APIs. A scope you take off counts at once: it is left out of tokens from then on, even from a refresh or a sign-in code issued before the change. |
 | **Resources** | The APIs it may ask tokens for ([resource indicators](/docs/applications/signing-users-in/#tokens-for-an-api)). |
 
 The client ID is on the client's row. The client secret is shown once, when the client is made or its secret is
