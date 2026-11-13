@@ -33,7 +33,8 @@ Removing a skin leaves the organizations that chose it on the primary organizati
 
 Each organization chooses its skin on its branding (see [Organization branding](/docs/branding/organization-branding/)):
 a skin, **Default** (Quisora's own look), or **Same as the primary organization**, which is the default. The primary
-organization's choice is the look of every organization that has not chosen its own.
+organization's choice is the look of every organization that has not chosen its own, so only a super admin can
+change it.
 
 The **Preview** buttons on the Skins page and on the branding card show the organization's sign-in page in the skin,
 saved or not.

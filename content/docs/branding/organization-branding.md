@@ -11,6 +11,9 @@ still decides everything else, so the logo and colour sit inside the skin's look
 Administrators of the organization and super admins set it, from the organization's page in the console (the
 **Branding** card). A service account can't.
 
+The primary organization's footer and skin are the exception. Other organizations use them too, so only a super admin
+can change them. Its other administrators see those two fields greyed out, and can still change its logos and colour.
+
 {{< screenshot name="look-branding" alt="The Branding card of an organization: light and dark logos, primary colour, skin and footer" >}}
 
 | Setting | What it does |
