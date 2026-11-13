@@ -61,6 +61,13 @@ A guest signs in to B with a first factor only, and B's own rules ask for a seco
 super admin can turn on **counts as a second factor** when S's rules require one of everybody who signs in to that
 application. Then B asks plain users for none.
 
+A guest can't set a password, add a passkey or connect another sign-in provider in B. Any of those would let them sign
+in without S, and keep access after S removes them. Their second factor in B is an authenticator app: where B asks
+for one, the guest is offered the app only.
+
+If an administrator of B sends the guest an invitation, accepting it makes the account B's own. That ends the link to
+S, so S removing the person no longer reaches that account.
+
 There is no leaver check through a refresh token, because S and B are on the same server. Instead a guest's session in
 B stands on the session at S it signed in with. When a person's sessions end in S (signed out everywhere, disabled,
 locked out, past their end date, sign-in reset, promoted to manager, or deleted), the guest's sessions, refresh grants

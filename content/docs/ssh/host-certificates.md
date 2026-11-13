@@ -66,3 +66,6 @@ Run the fetch every few minutes from a timer, as on a server. Like sshd, `ssh` r
 
 A client without `RevokedHostKeys` trusts a host certificate until it expires, even after it is revoked. That is
 another reason to keep host certificates short.
+
+A host certificate you revoke by hand stays on the revocation list, even if you turn **Sign host certificates** off
+later.

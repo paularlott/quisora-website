@@ -29,7 +29,9 @@ Managers and administrators are refused by default, so taking over an admin acco
 server. **Managers and administrators may get certificates** changes that.
 
 If emailed codes are too weak a second factor for your servers, limit the tenant's
-[sign-in methods](/docs/sign-in/#ways-to-sign-in), for example to passkeys only.
+[sign-in methods](/docs/sign-in/#ways-to-sign-in), for example to passkeys only. That applies to sign-ins from then
+on. An SSH client that is already signed in can still get certificates until its access token expires (10 minutes by
+default), so sign the tenant's users out too if that matters.
 
 ## The settings
 
