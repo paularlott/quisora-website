@@ -25,6 +25,9 @@ The **Certificates** table on the tenant's SSH page lists the certificates issue
 active, revoked and expired ones. **Revoke** takes one back. The user's own page in the console lists theirs too, and
 people can revoke their own on their account page.
 
+Certificates that belong to super admins show up only for super admins. Other administrators, and service accounts,
+don't see them in the list, the count or the search, and can't revoke them.
+
 {{< screenshot name="ssh-certs" alt="The Certificates table of a tenant's SSH page, with a host certificate and user certificates" class="max-w-3xl" >}}
 
 To cut someone off from everything at once, [lock them out](/docs/security/emergency-sign-out/#locking-out-one-person).
