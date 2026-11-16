@@ -22,6 +22,10 @@ VictoriaLogs. The database trail keeps events for days, not a year or more, is p
 protection against someone with write access to the database.
 {{< /tip >}}
 
+An organization's administrators share 120 audit pages a minute (the console, the API and the MCP server together),
+and each of them may read 60. Each super admin has 120 of their own. Past that a page gets 429 for a minute. A page
+that takes longer than 15 seconds is given up with 503: try a shorter time range.
+
 Administrators see their own organization's events, except those that name a super admin as actor or target (super
 admins are invisible below them everywhere). Super admins see everything. The mark is set when the event is written
 and never changes afterwards.
@@ -30,12 +34,18 @@ and never changes afterwards.
 
 | Area | Events |
 | --- | --- |
-| Sign-in | `login.success` (`audit.logins = false` turns it off), `login.failure`, `login.lockout`, `login.limited`, `org.spray.start` and `org.spray.end`, `logout`, `passkey.clone`, `login.recovery_code`, `mfa.import`, `login.email_code.sent`, `password.forgot`, `password.reset`, `invite.accept` |
+| Sign-in | `login.success` (`audit.logins = false` turns it off), `login.failure`, `login.lockout`, `login.limited`, `org.spray.start` and `org.spray.end`, `logout`, `login.session.evict`, `passkey.clone`, `login.recovery_code`, `mfa.import`, `login.email_code.sent`, `password.forgot`, `password.reset`, `invite.accept` |
 | OAuth and OpenID Connect | `oauth.consent`, `oauth.grant`, `oauth.token_exchange`, `oauth.device.approve`, `oauth.revoke`, `oauth.grant.evict`, `oauth.code.replay`, `oauth.refresh.reuse`, `oauth.client_auth.limited`. With `audit.tokens = true` also `oauth.refresh`, `oauth.client_credentials` and `oauth.device.start`. |
 | Administration | Users, groups, organizations, tenants, access, clients, providers, API tokens, service accounts, invitations, `user.locked_out`, signing keys (`keys.create`, `keys.rotate`, `keys.remove`), SSH certificate authorities (`ssh.*`), `backup.download`, `backup.restore`, `cluster.force_start`, `cluster.reload`, `config.reload` |
 | API access | `api.request.refused` and `apitoken.refused`: a refused management API or SCIM request, and a token presented with a wrong secret or after it was ended. At most once a minute per token or caller and reason on each node. |
 | Emergency sign-out | `org.signout` and `server.signout`, then `signout.sweep` |
 | Account self-service | `account.*`: passkeys, authenticator app, recovery codes, sessions, applications, connected providers, email verification |
+
+Failures anyone can repeat (wrong passwords and codes, refusals of a locked account, failed provider and passkey
+sign-ins) are recorded at most once a minute per account, sign-in step and address on each node. The next event counts
+the repeats held back in `detail.suppressed`. Every address that sends a wrong credential is still named in that
+minute, up to 200 addresses a minute per organization on each node. `quisora_audit_events_total{action="login.failure"}`
+counts every one.
 
 Updates record what changed, field by field, as `changed.<field>` = `old → new`. Secrets never appear.
 

@@ -60,6 +60,10 @@ primary organization's settings cover the super admins, so only super admins cha
 Users see their sessions on their account page and can end any of them. Administrators can end a user's sessions from
 the user's page. Changing a password signs the user out everywhere else.
 
+A user holds at most 100 sessions at once (`limits.sessions_per_user`). A sign-in is never refused for it: the sessions
+used least recently end instead, as if signed out, and each is recorded as `login.session.evict`. The session just
+made is always kept.
+
 Signing out and ending a session are not the same:
 
 | | Signing out of this browser | Ending a session from elsewhere, signing out everywhere, a lock-out |

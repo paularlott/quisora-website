@@ -38,12 +38,16 @@ The AI client then finds Quisora from the protected resource document, registers
   refused.
 - They are public clients with PKCE, and may ask for `openid`, `profile`, `email` and `offline_access` only.
 - Redirect URIs must be https, `localhost` or loopback, or a private-use scheme named after a domain the app owns.
+  Each is at most 512 characters, and all of them together at most 2,048.
 - Consent is always asked, with a warning that the organization has not verified the app.
 - Turning off **Allow self-registered apps** or removing the resource stops the apps' refresh tokens at once.
   An MCP server that verifies JWTs itself accepts an access token until it expires (10 minutes by default).
 - A registration nobody signs in with is removed after a day, and registration is rate limited per address.
 - An organization holds at most 10,000 apps nobody has used yet. At that limit, a new registration removes one of them
   at random, so a flood can't stop others registering. Apps people use are never removed.
+- An app with a metadata document is read again once a day. If the document's address answers `404` or `410` for ten
+  minutes, its author has withdrawn it: the app ends, as **Revoke** ends one. If the document can't be read for a
+  week, the app is unknown until it can. If the new copy changes the redirect URIs, people sign in again.
 
 ## Seeing and removing them
 

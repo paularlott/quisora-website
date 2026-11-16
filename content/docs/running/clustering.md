@@ -83,6 +83,10 @@ Before you run one:
 2. Start every node. The others start with empty databases, adopt the first node's data and copy from it. Started
    before it, they wait ("no data set").
 
+A node that has not formed the cluster logs `cluster peers not in view` a minute after starting, and every minute
+after, naming the peers it cannot see. Each is not started, not reachable on its cluster address, or has another
+`cluster.key`. Compare the key ids each node lists under `cluster_keys` on the System page.
+
 **Replacing a node:** start the replacement with an empty database and the same configuration. It copies everything.
 
 What the cluster does when nodes fail, changing its size and `quisora force-start` are in

@@ -85,16 +85,23 @@ say is set per organization ([Email templates](/docs/branding/emails/)).
 | Setting | Default | What | Applies |
 | --- | --- | --- | --- |
 | `limits.max_in_flight` | 4096 | Requests in progress on a node before it answers 503 (never probes, metrics, discovery or JWKS) | Next request |
+| `limits.max_in_flight_per_ip` | 0 | How many of those one address may have before it gets 429 (0: a sixteenth of `limits.max_in_flight`) | Next request |
 | `limits.login_per_ip_min` | 300 | Sign-in attempts per organization and address per minute | Next attempt |
 | `limits.lockout_attempts` | 10 | Failed passwords before an account is locked (0: never) | Next attempt |
 | `limits.lockout_minutes` | 15 | How long the lock lasts | Next attempt |
 | `limits.flows_per_ip` | 50 | Unfinished sign-ins one address may hold (0: no cap) | Next sign-in |
+| `limits.held_kb` | 2048 | Short-lived sign-in state, in KiB, one address or one signed-in user may have the server hold (0: no cap). A sign-in in progress is about 1 KiB. | Next request |
 | `limits.org_failures_per_minute` | 100 | Failed passwords per organization per minute before it counts as [under a spray](/docs/security/running-securely/#lockout-and-password-spraying) (0: never) | Next attempt |
 | `limits.password_min_length` | 15 | Shortest password accepted (8 to 64) | Next password |
 | `limits.grants_per_user` | 1000 | Refresh grants one user may hold | Next grant |
+| `limits.sessions_per_user` | 100 | Browser sessions one user may hold (1 to 10000). Past it the least recently used end. | Next sign-in |
 | `limits.password_workers` | CPUs | Passwords hashed at once | Restart |
-| `limits.ephemeral_mb` | 1024 | Memory for short-lived sign-in state | Restart |
+| `limits.ephemeral_mb` | 1024 | Memory for short-lived sign-in state (with a shared database, what each node writes there) | Restart |
 | `server.deny_networks` | none | Client addresses refused | Next request |
+
+The limits per address count an IPv6 address by its /64. People behind one address (an office, a mobile network)
+share its budgets, so raise `limits.held_kb` where many of them sign in from one address. Past it, new sign-ins from
+that address get 429 for up to 20 minutes, and nobody elsewhere is refused.
 
 `server.deny_networks` lists IP addresses and CIDR ranges, such as `["203.0.113.7", "198.51.100.0/24"]`. Their requests
 get a bare 403 before anything else happens, with no log line or audit event, so a flood costs the node little.
@@ -121,7 +128,8 @@ file. Nothing else is reloaded, and values given as flags or environment variabl
 2. Add the address or network to `server.deny_networks` in every node's file and reload. `quisora_http_denied_total`
    should start counting.
 3. If it moves around, lower `limits.login_per_ip_min`, `limits.lockout_attempts` or `limits.max_in_flight` the same
-   way. Reload rather than restart.
+   way, or `limits.held_kb` and `limits.flows_per_ip` when unfinished sign-ins are filling the node
+   (`quisora_ephemeral_refused_total`). Reload rather than restart.
 4. For many addresses, block them upstream.
 5. When it is over, take the entries out and reload again. The account steps are in
    [Running Quisora securely](/docs/security/running-securely/).

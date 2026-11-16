@@ -22,14 +22,15 @@ token as a bearer token. Without a token there is no such endpoint. Every node s
 | --- | --- |
 | `quisora_http_requests_total{code}`, `quisora_http_request_duration_seconds` | Requests by status class, and time to answer |
 | `quisora_http_shed_total` | Requests refused because too many were in progress |
+| `quisora_http_shed_address_total` | Requests refused with 429 because their address had its share in progress (`limits.max_in_flight_per_ip`) |
 | `quisora_http_denied_total` | Requests refused because the address is in `server.deny_networks` |
 | `quisora_audit_events_total{action,outcome}` | Every audit event |
-| `quisora_audit_undelivered_total`, `quisora_audit_spool_bytes` | Audit events VictoriaLogs will never receive, and the spool's size |
+| `quisora_audit_undelivered_total`, `quisora_audit_spool_bytes` | Audit events logged in full as `audit.undelivered` (VictoriaLogs will never receive them, or the spool disk was slow and they reach it later too), and the spool's size |
 | `quisora_mail_queued`, `quisora_mail_failed_total{reason}` | Emails waiting, and emails that never reached the mail server |
 | `quisora_backchannel_logout_queued`, `quisora_backchannel_logout_failed_total` | Logouts waiting to be retried, and given up |
 | `quisora_authorize_refused_total{error}` | Authorization requests from a known application refused before sign-in (`invalid_scope`, `unauthorized_client`, ...). Each is also logged as a warning naming the application. |
 | `quisora_ephemeral_bytes`, `quisora_ephemeral_budget_bytes`, `quisora_ephemeral_entries` | The node's short-lived sign-in state against `limits.ephemeral_mb` |
-| `quisora_ephemeral_refused_total{reason}` | Requests refused for it: `full` (503) or `flows_per_ip` (429) |
+| `quisora_ephemeral_refused_total{reason}` | Requests refused for it: `full` (503), `flows_per_ip` and `held_bytes` (429: an address or user at its limit), and `counters`, `contended`, `guard` and `cache` (the node's own caps) |
 | `quisora_ready`, `quisora_writable`, `quisora_leader` | This node serves, accepts changes, runs housekeeping |
 | `quisora_cluster_alive_nodes`, `quisora_cluster_size`, `quisora_cluster_quorum` | Cluster membership |
 | `quisora_partitions_owned` | Partitions this node owns (64 in all, shared by the ready nodes) |
@@ -59,8 +60,10 @@ token as a bearer token. Without a token there is no such endpoint. Every node s
 - `rate(quisora_http_shed_total[5m]) > 0`: the node is overloaded ([under attack](/docs/running/settings/#under-attack)).
 - `quisora_ephemeral_bytes / quisora_ephemeral_budget_bytes > 0.8` for 5 minutes, or any
   `increase(quisora_ephemeral_refused_total{reason="full"}[5m]) > 0`: new sign-ins get 503. Either a flood of unfinished
-  sign-ins or `limits.ephemeral_mb` is too small. A steady `flows_per_ip` rate is addresses starting sign-ins they do not
-  finish, or many users behind one address (set `server.trust_proxy`).
+  sign-ins or `limits.ephemeral_mb` is too small. A steady `flows_per_ip` or `held_bytes` rate is addresses starting
+  sign-ins they do not finish, or many users behind one address (set `server.trust_proxy`, or raise `limits.held_kb`).
+  A few addresses refused is an attack held off. Many at once with `full` rising is one with enough addresses to fill
+  the node.
 - For tenants that use SSH certificates: the log line `oidc: making an SSH revocation list` at error level, and on each
   server the fetch failing or the revocation list file older than 5 minutes
   ([SSH monitoring](/docs/ssh/setting-up-a-server/#watch-it)).

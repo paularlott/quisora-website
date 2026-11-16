@@ -10,7 +10,9 @@ works like a guest (B2B) account in Microsoft Entra: people keep signing in wher
 organization lets them in as guests. Its sign-in page shows **Continue with** and the first organization's name.
 
 In this page, **S** is the organization whose users sign in, and **B** is the one that receives the guests. Only a
-**super admin** can create, change or delete such a provider.
+**super admin** can create, change or delete such a provider, or a service account that
+[owns](/docs/automation/service-accounts/#owning-organizations) B, when S is the primary organization or another
+organization it owns.
 
 ## Setting it up
 
