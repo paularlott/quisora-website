@@ -16,17 +16,23 @@ organization it owns.
 
 ## Setting it up
 
-In organization B, open **Providers**, then **New provider**, choose the type **Another organization**, and pick S from
-the list. Nothing else is needed. You do not enter a client ID, secret or scopes.
+In organization B, open **Providers**, then **New provider**, and choose the type **Another organization**. Then pick
+S and one of its tenants: type the start of S's name, or the tenant's, and choose **S (tenant)** from the list. It
+searches as you type, so `S (sup` narrows to S's tenants starting "sup". Nothing else is needed. You do not enter a
+client ID, secret or scopes.
 
-Quisora makes the client the provider signs in with, in S: an application named `Sign-in to <B's name>` in S's default
+The tenant decides who in S may sign in. S's default tenant suits "everyone in S". A members-only tenant limits it to
+the people on its access list, for as long as their access lasts ([below](#only-some-people-for-a-time)).
+
+Quisora makes the client the provider signs in with, in S: an application named `Sign-in to <B's name>` in the chosen
 tenant. It is listed with S's applications, but edit the provider, not the application: it is made and removed with
 the provider. S's own rules for that tenant (who may sign in, second factors) apply to the sign-in at S.
 
 **Button label** defaults to S's display name. **Link existing users by verified email**, **Create accounts
 automatically** and **counts as a second factor** are all off. Allowed email domains work as for any provider.
 
-Changing the organization of an existing provider unlinks everyone who signed in through it.
+Changing the organization of an existing provider unlinks everyone who signed in through it. Changing the tenant
+signs out the guests who signed in through the old one. They sign in again, under the new tenant's access list.
 
 ## Adding guests
 
@@ -57,6 +63,19 @@ refused before anything else happens, so no guest is made for them. It is checke
 chosen, every user of S may sign in. If a chosen group is deleted in S it admits nobody. Choosing another source
 organization clears the groups.
 
+## Only some people, for a time
+
+For a vendor's support staff reaching into a customer's organization (S the vendor, B the customer), pick a
+members-only tenant of S as the provider's tenant, say `customer-access`. Only the people on its access list can sign
+in to B through the provider. Give each of them an entry that ends
+([access for a limited time](/docs/applications/timed-access/)).
+
+- Without a live entry, their own or a group's, signing in through the provider is refused at S.
+- When their entry ends, is removed or narrowed, the guest is out of B at once, and their sessions in B are signed out.
+  Their access tokens and SSH certificates in B expire by the entry's end.
+- B still decides what the guest gets in B: **Create accounts automatically**, the groups, and B's own tenants' access
+  lists, which can have ends of their own.
+
 ## Second factors and leavers
 
 A guest signs in to B with a first factor only, and B's own rules ask for a second factor where one is required. A
@@ -72,7 +91,8 @@ S, so S removing the person no longer reaches that account.
 
 There is no leaver check through a refresh token, because S and B are on the same server. Instead a guest's session in
 B stands on the session at S it signed in with. When a person's sessions end in S (signed out everywhere, disabled,
-locked out, past their end date, sign-in reset, promoted to manager, or deleted), the guest's sessions, refresh grants
+locked out, past their end date, sign-in reset, promoted to manager, or deleted), or they lose access to the
+provider's tenant in S, the guest's sessions, refresh grants
 and SSH certificates in B stop working too, within seconds. The guest account itself stays, and the person can sign in
 again through S if S still lets them. Personal API tokens a guest made in B stop the same way, except that they go on
 when the person only signs out in S.

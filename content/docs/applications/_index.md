@@ -104,3 +104,4 @@ Everything in the console can also be done through the management API. Every ser
 - [Device sign-in](/docs/applications/device-sign-in/): sign in on a CLI, a TV or another device without a browser
 - [Stronger security](/docs/applications/stronger-security/): pushed requests, DPoP and the FAPI 2.0 profile
 - [Authorization details](/docs/applications/authorization-details/): fine-grained permissions in access tokens
+- [Access for a limited time](/docs/applications/timed-access/): access list entries that end, and sign people out, at a set time
