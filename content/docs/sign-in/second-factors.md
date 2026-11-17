@@ -2,7 +2,20 @@
 title: "Second factors"
 description: "Passkeys, authenticator apps, recovery codes and codes by email, and how to require them."
 weight: 10
+aliases: ["/docs/passkeys-and-authenticator-apps/"]
 ---
+
+People choose how they prove who they are on their own account page.
+
+## Quick start
+
+1. Open **Your account**.
+2. To add a passkey: **Passkeys**, then **Add passkey**. Name it and confirm on your device.
+3. Or set up an authenticator app: **Password and Authenticator App**, then **Set up**. Scan the QR code and type in
+   the code the app shows.
+4. Make recovery codes: **Password and Authenticator App**, **Recovery codes**, then **Create codes**. Save them in a
+   password manager, or print them and lock them away.
+5. To make everyone use a second factor, require it on the organization or a tenant (below).
 
 ## Requiring a second factor
 
@@ -33,8 +46,8 @@ sign-in counts as two factors: the device you have, and the fingerprint or PIN t
 
 ### Turning them on
 
-Passkeys are on by default. The organization's **Passkeys** switch and each tenant's **Passkey** switch decide whether
-users may sign in with a passkey. A tenant cannot turn it on where the organization has it off. A passkey used as the
+Passkeys are on by default. You can switch them off per organization and per tenant: the organization's **Passkeys**
+switch and each tenant's **Passkey** switch decide whether users may sign in with a passkey. A tenant cannot turn it on where the organization has it off. A passkey used as the
 second factor after a password works either way.
 
 There is nothing to configure, but two things to know:

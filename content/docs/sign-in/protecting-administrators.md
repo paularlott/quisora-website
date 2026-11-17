@@ -4,6 +4,8 @@ description: "Which changes ask you to confirm it is you, and the extra rules ar
 weight: 40
 ---
 
+The roles (super admin, administrator, manager, user) are listed in the [docs overview](/docs/#roles).
+
 ## Confirm it is you
 
 Sensitive changes need a recent re-authentication: you signed in or confirmed within the last 5 minutes. The console
@@ -21,11 +23,15 @@ API or SCIM. (A [service account](/docs/automation/service-accounts/) makes only
 - creating or changing a service account, or rotating its secret,
 - changing an organization's [email templates](/docs/branding/emails/).
 
-Changes to your own account (a passkey, the authenticator app, recovery codes, your primary address, connecting a
-provider, an API token, signing out other sessions) need a re-authentication too, or a sign-in within 5 minutes that
-used your own second factor. That holds on the account page and through the management API alike. A sign-in through a provider trusted for the second factor does not count when the
-account has its own. An account whose second factor is a passkey confirms with the passkey. A
-[recovery code](/docs/sign-in/second-factors/#recovery-codes) stands in for a lost authenticator app or passkey.
+Changes to your own account need a re-authentication too:
+
+- They are: a passkey, the authenticator app, recovery codes, your primary address, connecting a provider, an API
+  token, and signing out other sessions.
+- A sign-in within the last 5 minutes counts instead, if it used your own second factor.
+- This holds on the account page and through the management API alike.
+- A sign-in through a provider trusted for the second factor does not count when the account has its own.
+- An account whose second factor is a passkey confirms with the passkey.
+- A [recovery code](/docs/sign-in/second-factors/#recovery-codes) stands in for a lost authenticator app or passkey.
 
 ## Extra rules for administrators
 

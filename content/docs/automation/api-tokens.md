@@ -2,6 +2,7 @@
 title: "Personal API tokens"
 description: "Let a script call Quisora as you, without a browser."
 weight: 10
+aliases: ["/docs/api-tokens/"]
 ---
 
 A personal API token lets a script or tool call Quisora as you. Every call is checked against your role at the time it
@@ -11,8 +12,8 @@ is made. If you are demoted or your account is disabled, the token loses that ac
 
 1. Open **Your account** and find the **API tokens** card.
 2. Choose **New token**, name it and pick its scopes.
-3. Set an expiry if you like. Left empty, the token gets the organization's longest lifetime, or never expires if
-   there is no limit.
+3. Set an expiry if you like. Left empty, the token gets the organization's longest lifetime (365 days by default), or never
+   expires if a super admin set no limit.
 4. Copy the token. It is shown once and looks like `qsr_<id>_<secret>`. Quisora keeps only a hash of the secret.
 
 {{< screenshot name="tokens" alt="The API tokens card on the account page, listing two tokens with their scopes and expiry dates" >}}
@@ -27,7 +28,11 @@ is made. If you are demoted or your account is disabled, the token loses that ac
 | `import` | Super admins | With `admin`: create users with the password hash, authenticator secret and provider links they had in another system |
 | `api` | Whoever the organization allows | Nothing in Quisora itself: it is for your own applications, which check it with Quisora |
 
-An `api` token cannot also carry `admin`, `scim`, `backup` or `import`. Make one token for each job.
+`import` works only together with `admin`. An `api` token cannot also carry `admin`, `scim`, `backup` or `import`.
+Make one token for each job.
+
+For automation that shouldn't depend on one person, use a [service account](/docs/automation/service-accounts/)
+instead. It belongs to the organization, not to a user.
 
 ## Using a token
 
@@ -42,7 +47,8 @@ means the token lacks the scope that call needs.
 
 ## Changing and revoking
 
-- **Edit** (the pencil) changes a token's name, applications and scopes. It asks you to confirm it is you.
+- **Edit** (the pencil) changes a token's name and, for an `api` token, the applications and the scopes it is
+  limited to. Its Quisora scopes, secret and expiry stay. It asks you to confirm it is you.
 - **New secret** (the refresh button) makes a new secret after you confirm. The old one stops working at once.
 - **Delete** revokes the token. Administrators can revoke a user's tokens from the user's page.
 - To end every personal token in an organization at once, use [emergency sign-out](/docs/security/emergency-sign-out/)

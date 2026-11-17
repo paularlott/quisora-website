@@ -33,8 +33,6 @@ Quisora never sees a private key. It only signs public keys.
 - **Only enter a sign-in code you started yourself.** Someone could start a sign-in on their machine and send you the
   code. If you enter it, they get a certificate in your name.
 
-Everything in the console can also be done through the management API. Every Quisora server shows its API reference at
-`/api-docs/`.
 
 ## In this guide
 

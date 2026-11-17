@@ -23,16 +23,24 @@ task build        # makes bin/quisora
 **Use Docker.** Build the image from the repository:
 
 ```bash
+git clone https://github.com/paularlott/quisora.git
+cd quisora
 docker build -t quisora .
 ```
 
 ## Make a master key
 
-The master key locks every secret Quisora keeps, such as signing keys and provider secrets. Make one and keep it safe. Without it, the data can't be read.
+The master key locks every secret Quisora keeps, such as signing keys and provider secrets. Without it, the data can't be read.
 
-```bash
-export QUISORA_MASTER_KEY="$(quisora genkey)"
-```
+1. Run `quisora genkey` once. It prints a new key.
+2. Save the key in a password manager.
+3. Set it for Quisora:
+
+   ```bash
+   export QUISORA_MASTER_KEY=<the key>
+   ```
+
+   This lasts only for the current terminal. Set it again in each new one.
 
 {{< tip "warning" >}}
 Store the master key somewhere safe, away from the data and the backups: a password manager or a secret store such as Vault. Don't pass it as a command line flag, where others on the machine can see it.
@@ -72,8 +80,10 @@ The admin console is at `https://localhost:8443/admin`. From there you can add o
 
 The container keeps its data in `/data`, so mount a volume there:
 
+Make the key once with `docker run --rm quisora genkey`, and save it in a password manager. Then, in each new terminal:
+
 ```bash
-export QUISORA_MASTER_KEY="$(docker run --rm quisora genkey)"
+export QUISORA_MASTER_KEY=<the key>
 docker run --rm -v quisora-data:/data -e QUISORA_MASTER_KEY \
   -e QUISORA_PUBLIC_URL=https://localhost:8443 quisora bootstrap
 docker run -d -p 8443:8443 -v quisora-data:/data -e QUISORA_MASTER_KEY \
@@ -90,6 +100,8 @@ quisora invite primary admin@example.com
 
 ## What next
 
-- [Configuration basics](/docs/configuration/) for a real address, certificate and database.
-- [Sign-in providers](/docs/sign-in-providers/) to let people use an account they already have.
-- [Connecting applications](/docs/applications/) to sign people in to your apps.
+1. [Add your first application](/docs/applications/#your-first-application), so people can sign in to it.
+2. [Add a sign-in provider](/docs/sign-in/providers/), so people can use an account they already have.
+3. [Run it as a service](/docs/running/first-start/#running-as-a-service) and
+   [set it up for production](/docs/running/settings/): a real address, certificate and database.
+4. [Set up backups](/docs/running/backup-and-restore/).

@@ -4,12 +4,28 @@ description: "The authorization code flow with PKCE, and what you get back."
 weight: 10
 ---
 
+## Use a library
+
+Use an OpenID Connect library for your language. It does every step below for you. These are the values it needs:
+
+| Value | Where to find it |
+| --- | --- |
+| Issuer | `https://id.example.com/o/<org id>`, shown when you create the client. The library reads the rest from it. |
+| Client ID | On the client's row in the console. |
+| Client secret | Shown once, when the client is made or its secret is rotated. None for a public client. |
+| Redirect URI | Your app's callback address, the same as on the client. |
+| Scopes | `openid profile email`, and `offline_access` to keep the user signed in. |
+
+The rest of this page is what happens underneath, for when you need it.
+
+## How it works
+
 This is the usual way to sign a user in. Your app sends the browser to Quisora. The user signs in there (whatever the
 tenant allows) and approves what the app asks for. Quisora sends the browser back with a one-time **code**, and your
 app exchanges it for tokens.
 
 Quisora requires PKCE (S256) of every public client, and of confidential clients unless you turn **Require PKCE** off
-on the client. In a real app, let your OAuth library do all of this: give it the issuer and the client ID.
+on the client.
 
 ## 1. Send the browser to Quisora
 

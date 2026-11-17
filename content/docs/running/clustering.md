@@ -2,9 +2,32 @@
 title: "Clustering"
 description: "Run several nodes on a shared database or as a replicated gossip cluster, and rotate the cluster key."
 weight: 80
+aliases: ["/docs/clusters/"]
 ---
 
-There are two modes. Do not mix them.
+One node is plenty for many setups. For more than one, there are two modes. Do not mix them.
+
+- **Shared database:** every node uses one PostgreSQL, MySQL or MariaDB database.
+- **Replicated (gossip):** every node keeps its own copy, and the nodes copy changes to each other directly.
+
+{{< screenshot name="system" alt="The system overview in the admin console, showing a cluster of three nodes" >}}
+
+## Quick start
+
+1. Pick a mode, below.
+2. Keep every node's clock in sync with NTP. A node more than 5 seconds off stops serving until it is fixed.
+3. Give every node the same master key.
+4. Set the server up once, not on every node: `quisora bootstrap` against the shared database, or
+   `quisora bootstrap --new-cluster` on one node of a replicated cluster.
+5. Start every node, and open the cluster port (7947 for change notices, 7946 for gossip) between the nodes only.
+6. Point the load balancer at `/readyz`. It needs no sticky sessions.
+
+| Endpoint | Use it for |
+| --- | --- |
+| `/healthz` | Is the process alive? For container and process restarts. |
+| `/readyz` | Should it get traffic? For load balancers. |
+
+Don't restart a node just because it isn't ready. A node catching up is still alive.
 
 ## Shared database
 

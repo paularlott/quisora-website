@@ -11,8 +11,14 @@ quisora bootstrap --data-dir /var/lib/quisora --public-url https://id.example.co
 quisora serve --data-dir /var/lib/quisora --public-url https://id.example.com
 ```
 
-You also need a master key (`quisora genkey` prints one). Set it as `server.master_key` or `QUISORA_MASTER_KEY`, and keep
-it safe, apart from the data and the backups.
+You also need a master key. Make it once and keep it:
+
+1. Run `quisora genkey` once. It prints a new key.
+2. Save the key in a password manager. Without it, the data can't be read.
+3. Set it for Quisora: `export QUISORA_MASTER_KEY=<the key>`. Set it again in each new terminal, or put it in the
+   service's environment file ([below](#running-as-a-service)).
+
+Keep the key apart from the data and the backups.
 
 `bootstrap` does three things:
 
@@ -22,8 +28,64 @@ it safe, apart from the data and the backups.
   second factor.
 
 Running it again changes nothing. To get a new link while the server runs, use `quisora invite primary admin@example.com`.
-If you are locked out of the console, see [break-glass](/docs/security/running-securely/#incident-response). Until a
+If you are locked out of the console, see [break-glass](/docs/security/running-securely/#nobody-can-get-into-the-console), the emergency way back in. Until a
 server is set up, `/readyz` reports not ready.
+
+## Running as a service
+
+On Linux, run Quisora under systemd as its own user. Make the user, its folders and an environment file that only root
+and Quisora can read:
+
+```bash
+sudo useradd --system --home-dir /var/lib/quisora --shell /usr/sbin/nologin quisora
+sudo install -d -m 750 -o quisora -g quisora /var/lib/quisora
+sudo install -d -m 750 -o root -g quisora /etc/quisora
+sudo install -m 640 -o root -g quisora /dev/null /etc/quisora/quisora.env
+sudoedit /etc/quisora/quisora.env    # QUISORA_MASTER_KEY=<the key>
+```
+
+Put settings in `/etc/quisora/quisora.toml`, which is found without `--config`. For example `server.public_url`, and
+`server.data_dir = "/var/lib/quisora"`. Then write `/etc/systemd/system/quisora.service`:
+
+```ini
+[Unit]
+Description=Quisora
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=quisora
+Group=quisora
+EnvironmentFile=/etc/quisora/quisora.env
+ExecStart=/usr/local/bin/quisora serve
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+# longer than server.shutdown_drain + server.shutdown_timeout (10 + 30 seconds by default)
+TimeoutStopSec=60
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/quisora
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Set the server up once as the service user, then start it:
+
+```bash
+sudo -u quisora sh -c 'set -a; . /etc/quisora/quisora.env; exec quisora bootstrap'
+sudo systemctl daemon-reload
+sudo systemctl enable --now quisora
+journalctl -u quisora -f
+```
+
+- `systemctl reload quisora` applies the settings that change without a restart. Use `systemctl restart quisora` for
+  the rest.
+- `quisora invite` and the other commands need the same key. Run them the same way as `bootstrap` above.
+- To listen on port 443 instead of 8443, add `AmbientCapabilities=CAP_NET_BIND_SERVICE` to the unit and set
+  `server.listen = ":443"`.
 
 ## The primary organization
 
@@ -37,9 +99,12 @@ admins are gone, `quisora invite --break-glass --super-admin` recovers access.
 The [Dockerfile](https://github.com/paularlott/quisora/blob/main/Dockerfile) builds a static binary on a distroless
 base. It runs as a non-root user and keeps its data in `/data`. Settings are `QUISORA_*` variables.
 
+Make the master key once, save it in a password manager, then set it in each new terminal:
+
 ```bash
 docker build -t quisora .
-export QUISORA_MASTER_KEY="$(docker run --rm quisora genkey)"   # keep it
+docker run --rm quisora genkey               # once: save the key it prints
+export QUISORA_MASTER_KEY=<the key>          # in each new terminal
 
 docker run --rm -v quisora-data:/data -e QUISORA_MASTER_KEY -e QUISORA_PUBLIC_URL=https://localhost:8443 quisora bootstrap
 docker run -d -p 8443:8443 -v quisora-data:/data -e QUISORA_MASTER_KEY -e QUISORA_PUBLIC_URL=https://localhost:8443 quisora

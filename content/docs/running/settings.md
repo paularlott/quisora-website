@@ -2,7 +2,19 @@
 title: "Settings"
 description: "Where settings live, the ones every server needs, limits, TLS, email and reloading without a restart."
 weight: 20
+aliases: ["/docs/configuration/"]
 ---
+
+## What you need to do
+
+1. Set the public address, the data directory and the master key ([below](#settings-every-server-needs)).
+2. Give Quisora a real TLS certificate, and keep secrets out of flags.
+3. Set up email if you want invitations and password resets sent for you.
+
+Everything else has a sensible default. Check the list in [Before you go live](#before-you-go-live) before real
+users arrive.
+
+## Where settings live
 
 Every setting is a flag, a `QUISORA_*` environment variable or a key in a TOML file. A flag beats the environment, which
 beats the file. The public URL, for example, is `--public-url`, `QUISORA_PUBLIC_URL` or `server.public_url`.
@@ -33,12 +45,84 @@ and `server.restore_password`. Any of them can instead name a value in Vault or 
 | `server.previous_master_keys` | `--previous-master-keys` | Earlier keys, only while [rotating the master key](/docs/running/rotating-the-master-key/). |
 | `server.tls_cert`, `server.tls_key` | `--tls-cert`, `--tls-key` | PEM files. Without them a self-signed certificate is made in `<data-dir>/tls`. |
 
+```toml
+[server]
+public_url = "https://id.example.com"   # the address people use
+data_dir = "/var/lib/quisora"           # where this node keeps its files
+tls_cert = "/etc/quisora/tls.crt"       # your certificate and key (PEM)
+tls_key = "/etc/quisora/tls.key"
+# master_key: better in QUISORA_MASTER_KEY, or from a secret store
+```
+
+The public URL must be https, and a host name rather than an IP address, or passkeys won't work.
+
 Sessions, tokens and sign-in settings are described in their own guides ([sign-in](/docs/sign-in/),
 [applications](/docs/applications/)). A few are only server defaults that an organization can override in the console
 (**Organizations**, edit): `limits.password_min_length`, `limits.lockout_attempts`, `limits.lockout_minutes`,
 `limits.grants_per_user`, `tokens.api_token_max_days`, `session.privileged_ttl` and `session.privileged_idle`.
 
-## The data directory
+## TLS certificates
+
+With `server.tls_cert` and `server.tls_key` set, Quisora checks the two files every hour and switches to a renewed
+certificate without a restart. New connections get the new certificate and open ones carry on. `kill -HUP` loads it at
+once, so make that your renewal hook. If a pair does not load (a certificate written before its key, a key that does
+not match), the current certificate stays in use and the next check tries again.
+
+## Email
+
+With `mail.smtp_host` set, Quisora emails invitations, password resets and address confirmations. Without it nothing is
+emailed: administrators share invitation links themselves and there is no self-service password reset. What the emails
+say is set per organization ([Email templates](/docs/branding/emails/)).
+
+```toml
+[mail]
+smtp_host = "smtp.example.com"
+from = "Identity <no-reply@example.com>"
+tls = "starttls"                        # starttls, tls or none
+```
+
+## Behind a load balancer
+
+Tell Quisora which addresses your load balancer uses, so rate limits and the audit log see the real client:
+
+```toml
+[server]
+trust_proxy = ["10.0.0.0/8"]
+```
+
+Use `/readyz` as the load balancer's health check.
+
+## Choosing a database
+
+The default is BadgerDB, built in and kept in the data directory. You don't need to set anything. For several nodes
+on one database, use PostgreSQL, MySQL or MariaDB. See [storage](/docs/running/storage/).
+
+## The look
+
+The site name and default theme are under `[ui]`. Each organization can also pick a skin, a logo and a colour of its own
+in the console ([branding](/docs/branding/)).
+
+```toml
+[ui]
+site_name = "Identity"
+default_theme = "system"   # light, dark or system
+```
+
+## Before you go live
+
+A short list. The [hardening checklist](/docs/security/running-securely/#hardening-checklist) has the full one.
+
+- Keep the master key in a secret store, away from the data and the backups.
+- Use a real certificate.
+- Turn on verified TLS to your database, if it is a separate server.
+- Send the audit log to VictoriaLogs (`audit.victorialogs_url`). The built-in audit log is for testing.
+- Set `metrics.token` and watch `/metrics` ([monitoring](/docs/running/monitoring/)).
+- Take [backups](/docs/running/backup-and-restore/) on a schedule, and test a restore.
+- Keep the number of super admins small, and keep at least two.
+
+## Reference
+
+### The data directory
 
 `server.data_dir` is the only place a node writes files. Put it on persistent storage that only the Quisora user can
 read (it is created with mode 0700). Each node of a cluster has its own. Never share one between nodes.
@@ -53,25 +137,14 @@ read (it is created with mode 0700). Each node of a cluster has its own. Never s
 Backups do not need the data directory, but restoring a node without it gives it a new identity. Audit events still
 waiting in `auditspool/`, and the emails and back-channel logouts the node had queued, are lost with it.
 
-## TLS certificates
-
-With `server.tls_cert` and `server.tls_key` set, Quisora checks the two files every hour and switches to a renewed
-certificate without a restart. New connections get the new certificate and open ones carry on. `kill -HUP` loads it at
-once, so make that your renewal hook. If a pair does not load (a certificate written before its key, a key that does
-not match), the current certificate stays in use and the next check tries again.
-
-## Stopping
+### Stopping
 
 On SIGTERM or SIGINT a node stops taking new requests, lets those in flight finish, then closes. If a load balancer or
 orchestrator has polled `/readyz` in the last two minutes, `/readyz` first answers 503 (`draining`) for
 `server.shutdown_drain` seconds (default 10) so traffic moves away. Requests in flight then get
 `server.shutdown_timeout` seconds (default 30). Make your orchestrator's stop timeout longer than the two together.
 
-## Email
-
-With `mail.smtp_host` set, Quisora emails invitations, password resets and address confirmations. Without it nothing is
-emailed: administrators share invitation links themselves and there is no self-service password reset. What the emails
-say is set per organization ([Email templates](/docs/branding/emails/)).
+### Email queue
 
 - Mail is queued on the node before the request answers, and survives a restart. A message the mail server does not
   take is retried after 1, 5, 30 and 120 minutes, then given up and logged.
@@ -80,7 +153,7 @@ say is set per organization ([Email templates](/docs/branding/emails/)).
 - Mail and back-channel logouts are queued per node. A node that is gone for good leaves its queue unsent.
 - Watch `quisora_mail_queued`: growing means the mail server is not taking mail.
 
-## Limits and denied addresses
+### Limits and denied addresses
 
 | Setting | Default | What | Applies |
 | --- | --- | --- | --- |

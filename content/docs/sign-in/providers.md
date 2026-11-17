@@ -2,6 +2,7 @@
 title: "Upstream providers"
 description: "Let people sign in with Google, Microsoft, GitHub, GitLab, Auth0 or your own single sign-on."
 weight: 20
+aliases: ["/docs/sign-in-providers/"]
 ---
 
 A provider lets people sign in with an account they already have elsewhere. Each one shows on the sign-in page as
@@ -23,7 +24,8 @@ own. The client secret is stored sealed and never shown again: leave the field b
 
 {{< screenshot name="providers" alt="The providers page in the admin console, listing six providers" class="max-w-3xl" >}}
 
-Providers belong to one organization. Its tenants choose which ones their applications offer.
+Providers belong to one organization. Its tenants choose which ones their applications offer: all of the
+organization's providers by default, including ones added later, or a few picked under the tenant's **Sign-in rules**.
 
 ## What each type needs
 
@@ -120,4 +122,3 @@ unless you allow them: list the provider's network in `server.allowed_networks` 
 `allowed_networks = ["172.16.0.0/12"]`), or in a home lab set `server.allow_private_networks`. A provider whose
 certificate comes from an internal CA needs that CA in `server.extra_ca_file`.
 
-Everything here can also be done through the management API. Every server shows its API reference at `/api-docs/`.

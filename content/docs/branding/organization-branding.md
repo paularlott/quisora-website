@@ -32,5 +32,4 @@ with it. The form tells you if it is too light.
 Logos are stored in Quisora and served from it, so nothing is fetched from outside and branding works on a network
 without internet access. For email, use a PNG logo: many mail clients show no SVG images.
 
-The management API can set the same fields (`PATCH /api/orgs/{org}/branding`), and every server shows its API reference
-at `/api-docs/`.
+The management API can set the same fields (`PATCH /api/orgs/{org}/branding`).

@@ -54,8 +54,8 @@ its second factor, and unused invitation and reset links.
 ## Sessions
 
 Browser sessions last 7 days from sign-in and end after 24 hours without use. An organization can set shorter
-lengths on its settings, never longer. Managers and above get 12 hours, and 1 hour unused, when those are shorter. The
-primary organization's settings cover the super admins, so only super admins change them.
+lengths on its settings, never longer. For managers and above, a session lasts at most 12 hours, and ends after 1 hour
+without use. The primary organization's settings cover the super admins, so only super admins change them.
 
 Users see their sessions on their account page and can end any of them. Administrators can end a user's sessions from
 the user's page. Changing a password signs the user out everywhere else.

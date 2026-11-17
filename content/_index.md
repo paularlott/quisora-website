@@ -41,18 +41,18 @@ Run sign-in for several companies, teams or customers from one server. Each orga
 Admins always use a second factor. Secrets are sealed at rest, every change is in the audit log, and backups are always encrypted.
 {{< /feature >}}
 
-{{< feature icon="palette" title="A console people like" >}}
+{{< feature icon="palette" title="An accessible console" >}}
 A clean admin console in light and dark, built to WCAG 2.2 AA. Changes show up live, and nothing loads from a CDN.
 {{< /feature >}}
 
 {{< /features >}}
 
 {{< showcase shot="login" alt="The sign-in page of an organization, with single sign-on, passkey and email options" >}}
-## A sign-in page that just works
+## A sign-in page for each organization
 
 Each organization gets its own sign-in page. Offer passkeys, a password with a second factor, or "Continue with" Google, Microsoft, GitHub, GitLab, Auth0 or your own single sign-on.
 
-[About sign-in providers](/docs/sign-in-providers/)
+[About sign-in providers](/docs/sign-in/providers/)
 {{< /showcase >}}
 
 {{< showcase shot="passkeys" alt="The passkeys card on a user's account page, listing two passkeys" reverse="true" >}}
@@ -60,7 +60,7 @@ Each organization gets its own sign-in page. Offer passkeys, a password with a s
 
 On their account page, people add passkeys and authenticator apps, see where they are signed in, and make API tokens for their scripts.
 
-[About passkeys and authenticator apps](/docs/passkeys-and-authenticator-apps/)
+[About passkeys and authenticator apps](/docs/sign-in/second-factors/)
 {{< /showcase >}}
 
 {{< showcase shot="system" alt="The system overview, showing a three node cluster" >}}
@@ -68,7 +68,7 @@ On their account page, people add passkeys and authenticator apps, see where the
 
 Start with one node on its built-in database. Later, run several nodes on PostgreSQL, MySQL or MariaDB, or let each node keep its own copy and replicate.
 
-[About running a cluster](/docs/clusters/)
+[About running a cluster](/docs/running/clustering/)
 {{< /showcase >}}
 
 {{< features
@@ -91,12 +91,13 @@ Online backups, always encrypted with a password. A restore is checked before an
 {{< /features >}}
 
 <section class="glass mt-20 p-6 sm:p-10 text-center">
-  <h2 class="text-3xl font-extrabold tracking-tight mb-3">Up and running in a few minutes</h2>
-  <p class="text-muted text-lg max-w-xl mx-auto mb-6">Make a key, set up the server once, and start it. Then open the link it prints and make your admin account.</p>
+  <h2 class="text-3xl font-extrabold tracking-tight mb-3">Getting started</h2>
+  <p class="text-muted text-lg max-w-xl mx-auto mb-6">Make a master key once and save it in a password manager. Set it in your terminal, set the server up once, and start it. Then open the link it prints and make your admin account.</p>
   <div class="max-w-2xl mx-auto text-left">
 
 ```bash
-export QUISORA_MASTER_KEY="$(quisora genkey)"
+quisora genkey                       # once: save the key it prints in a password manager
+export QUISORA_MASTER_KEY=<the key>  # again in each new terminal
 quisora bootstrap --public-url https://localhost:8443
 quisora serve --public-url https://localhost:8443
 ```

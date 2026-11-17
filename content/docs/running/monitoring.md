@@ -4,6 +4,17 @@ description: "Health endpoints, the metrics Quisora exports, and the alerts wort
 weight: 110
 ---
 
+## What you need to do
+
+1. Point your load balancer at `/readyz`, and your container or process checks at `/healthz`.
+2. Set `metrics.token` and have Prometheus scrape `/metrics` on every node.
+3. Start with these alerts, and add more from the [list below](#alerts-worth-having) as you need them:
+   - a node not ready: `quisora_ready == 0` for more than a few minutes;
+   - audit events at risk: `increase(quisora_audit_undelivered_total[5m]) > 0`;
+   - email failing: `increase(quisora_mail_failed_total[1h]) > 0`;
+   - an application whose users cannot sign in:
+     `increase(quisora_authorize_refused_total{error=~"invalid_scope|unauthorized_client"}[15m]) > 0`.
+
 ## Health endpoints
 
 - `/healthz` is liveness. Use it for container and process checks.
@@ -13,7 +24,15 @@ weight: 110
 
 Probes, metrics, discovery and JWKS are never shed under load.
 
-## Metrics
+## Access log
+
+The access log is on by default (`log.access`, `QUISORA_LOG_ACCESS`; set false to turn it off). It records each request's
+method, path, status, duration, size, client address and request id. The query string is never logged. Probes, scrapes
+and static files are not logged.
+
+## Reference
+
+### Metrics
 
 `GET /metrics` serves Prometheus metrics when `metrics.token` is set (`QUISORA_METRICS_TOKEN`). Prometheus sends the
 token as a bearer token. Without a token there is no such endpoint. Every node serves its own.
@@ -40,7 +59,7 @@ token as a bearer token. Without a token there is no such endpoint. Every node s
 | `quisora_master_key_rotation` | 1 while previous master keys are configured |
 | `quisora_build_info`, `quisora_uptime_seconds`, `quisora_goroutines`, `quisora_memory_heap_bytes` | The process |
 
-## Alerts worth having
+### Alerts worth having
 
 - `increase(quisora_authorize_refused_total{error=~"invalid_scope|unauthorized_client"}[15m]) > 0`: an application asks
   for what its settings do not allow, so its users cannot sign in.
@@ -67,9 +86,3 @@ token as a bearer token. Without a token there is no such endpoint. Every node s
 - For tenants that use SSH certificates: the log line `oidc: making an SSH revocation list` at error level, and on each
   server the fetch failing or the revocation list file older than 5 minutes
   ([SSH monitoring](/docs/ssh/setting-up-a-server/#watch-it)).
-
-## Access log
-
-The access log is on by default (`log.access`, `QUISORA_LOG_ACCESS`; set false to turn it off). It records each request's
-method, path, status, duration, size, client address and request id. The query string is never logged. Probes, scrapes
-and static files are not logged.

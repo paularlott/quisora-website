@@ -5,8 +5,28 @@ description: "Sign users in to your apps with OpenID Connect, and get tokens for
 weight: 130
 ---
 
-Quisora is an OpenID Connect provider and OAuth 2 authorization server. Your apps sign users in through it, your APIs
-check the tokens it issues, and your services get tokens of their own.
+Your apps sign users in through Quisora, your APIs check the tokens it issues, and your services get tokens of their
+own.
+
+- **OAuth 2** is the standard way for an app to get a token that lets it call an API.
+- **OpenID Connect** (OIDC) builds on OAuth 2 to sign people in: the app also gets a token that says who the person is.
+- The **issuer** is the address that names who issued a token. Your app's library starts from it.
+
+## Your first application
+
+1. In the console, open **Tenants** and choose the **Default** tenant. A tenant is a group of applications that share
+   sign-in rules. Every organization has a default one.
+2. Choose **Manage clients**, then **New client**.
+3. Give it a name. Keep the client secret under **Authentication** for an app with a server, or choose **Public** for a
+   single-page, mobile or desktop app.
+4. Keep **Authorization code** ticked, and add your app's callback address under **Redirect URIs**.
+5. Choose **Create client**. Copy the **Client ID**, the **Issuer** and the **Client secret** from the dialog that
+   follows. The secret is shown only once.
+6. In your app's OpenID Connect library, set the issuer, the client ID and secret, and the same redirect URI.
+
+{{< screenshot name="app-client-secret" alt="The New client secret dialog, showing the client ID, issuer, discovery URL and client secret to copy" class="max-w-2xl" >}}
+
+## The issuer
 
 Each organization is its own authorization server. Its **issuer** is your server's address, then `/o/`, then the
 organization's id (for example `https://id.example.com/o/034nmRmWuXazwvCcdrmRxu`). Every endpoint is under it. Any
@@ -20,7 +40,7 @@ An application is a **client**. It belongs to a tenant, and so to one organizati
 other organization's endpoints. The tenant decides who may sign in and how, so first decide which tenant the app
 belongs in.
 
-In the console, open the organization, then **Tenants**, the tenant, and **Clients**. Click **New client**.
+In the console, open the organization, then **Tenants**, the tenant, and **Manage clients**. Choose **New client**.
 
 {{< screenshot name="app-clients" alt="The Clients page of a tenant, with its list of clients and the New client button" >}}
 
@@ -93,8 +113,6 @@ expire.
 The implicit and hybrid flows, the password grant, request objects (JAR), mTLS client authentication and
 certificate-bound tokens, and front-channel logout.
 
-Everything in the console can also be done through the management API. Every server shows its API reference at
-`/api-docs/`.
 
 ## In this guide
 

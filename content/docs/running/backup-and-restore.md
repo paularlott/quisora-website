@@ -2,7 +2,21 @@
 title: "Backup and restore"
 description: "Take encrypted backups from a running server, schedule them, and restore into an empty store."
 weight: 60
+aliases: ["/docs/backups/"]
 ---
+
+## Quick start
+
+1. As a super admin, make an [API token](/docs/automation/api-tokens/) with the `backup` scope. It expires within 30
+   days, so renew it on a schedule.
+2. Choose a backup password of at least 12 characters. Keep it in a file only the backup user can read, apart from the
+   backups.
+3. Take a backup from the running server, with the token in `QUISORA_ADMIN_TOKEN`:
+   `quisora backup --server https://id.example.com --password-file /etc/quisora/backup-password quisora.bak`
+4. Run it every night from another machine ([scheduling](#scheduling)).
+5. Now and then, restore a backup into a spare server to check it works.
+
+## How backups work
 
 A backup is one compressed file of every record. It is always encrypted with a password you choose (at least 12
 characters), not with the master key, so a stolen master key does not open old backups and a stolen backup needs its
@@ -47,7 +61,7 @@ kept:
 30 2 * * * backup QUISORA_ADMIN_TOKEN="$(cat /etc/quisora/backup-token)" quisora backup --server https://id.example.com --password-file /etc/quisora/backup-password /srv/backups/quisora-$(date +\%F).bak && find /srv/backups -name 'quisora-*.bak' -mtime +30 -delete
 ```
 
-Give the token an expiry and renew it. Try a restore now and then, into a scratch node: a backup nobody has restored is
+Backup tokens expire within 30 days, so renew yours on a schedule. Try a restore now and then, into a scratch node: a backup nobody has restored is
 a hope, not a backup.
 
 ## Restoring

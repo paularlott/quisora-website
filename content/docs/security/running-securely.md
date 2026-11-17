@@ -4,26 +4,6 @@ description: "What Quisora protects, what you must provide, a hardening checklis
 weight: 10
 ---
 
-## What Quisora protects against
-
-Quisora is built to withstand attackers on the internet (with no credentials, or with a user's own), users of one
-organization trying to reach another, applications trying to exceed what they were granted, and someone who gets a
-copy of the database or a backup. It does not defend against someone who controls a node's host, its memory or its
-configuration: whoever can run the commands on a server is fully trusted.
-
-What you provide around it:
-
-- a real TLS certificate (or a TLS proxy), and `server.trust_proxy` set when you run behind a load balancer;
-- least-privilege applications: only the scopes and tenants they need;
-- few super admins, and reviewed access;
-- encryption at rest for the storage, and verified TLS to a database server;
-- the master key and cluster key kept like the secrets they are;
-- control of who can log in to the hosts and read the configuration.
-
-Passwords must be at least the organization's shortest length, else 15 characters, and are refused when they are
-common words, keyboard runs, repeated patterns or built on the person's name, email or organization. These are offline
-checks. There is no breached-password list.
-
 ## Hardening checklist
 
 Before production:
@@ -67,6 +47,26 @@ Profile pictures are public to anyone who has their URL: applications show them 
 in. A picture lives only while it is the user's current one. An organization that wants none can turn pictures off,
 and a server can start with `--disable-pictures`.
 {{< /tip >}}
+
+## What Quisora protects against
+
+Quisora is built to withstand attackers on the internet (with no credentials, or with a user's own), users of one
+organization trying to reach another, applications trying to exceed what they were granted, and someone who gets a
+copy of the database or a backup. It does not defend against someone who controls a node's host, its memory or its
+configuration: whoever can run the commands on a server is fully trusted.
+
+What you provide around it:
+
+- a real TLS certificate (or a TLS proxy), and `server.trust_proxy` set when you run behind a load balancer;
+- least-privilege applications: only the scopes and tenants they need;
+- few super admins, and reviewed access;
+- encryption at rest for the storage, and verified TLS to a database server;
+- the master key and cluster key kept like the secrets they are;
+- control of who can log in to the hosts and read the configuration.
+
+Passwords must be at least the organization's shortest length, else 15 characters, and are refused when they are
+common words, keyboard runs, repeated patterns or built on the person's name, email or organization. These are offline
+checks. There is no breached-password list.
 
 ## Incident response
 

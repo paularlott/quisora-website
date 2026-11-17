@@ -8,7 +8,16 @@ weight: 100
 This section is for the person who runs the server: first start, settings, storage, keys, backups, upgrades, clusters
 and monitoring. Day-to-day administration happens in the console and is covered in the other sections.
 
-Every server shows its management API reference at `/api-docs/`. Most of what the console does can be done there too.
+## In order
+
+Going from a first try to production, work through these in turn:
+
+1. [First start](/docs/running/first-start/), and running it as a service.
+2. [Settings](/docs/running/settings/): the address, certificate, email and limits.
+3. [Storage](/docs/running/storage/): which database to use.
+4. [Backup and restore](/docs/running/backup-and-restore/): nightly backups, and a tested restore.
+5. [Health and monitoring](/docs/running/monitoring/): health checks, metrics and alerts.
+6. [Upgrading](/docs/running/upgrading/): one release at a time.
 
 ## In this guide
 

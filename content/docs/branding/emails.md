@@ -92,5 +92,4 @@ have the server email at most 300 invitations and verification links an hour. Pa
 invitation link can still be issued without email and shared. Each administrator may also send at most 5 test emails a
 minute and 30 an hour.
 
-The management API can read, preview and send test emails from drafts. Every server shows its API reference at
-`/api-docs/`.
+The management API can read, preview and send test emails from drafts.
