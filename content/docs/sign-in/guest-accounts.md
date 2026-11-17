@@ -78,7 +78,12 @@ in to B through the provider. Give each of them an entry that ends
 
 ## Second factors and leavers
 
-A guest signs in to B with a first factor only, and B's own rules ask for a second factor where one is required. A
+A guest signs in to B with a first factor only, and B's own rules ask for a second factor where one is required.
+Applications with the [`idp` scope](/docs/applications/signing-users-in/#the-idp-scope) also learn where the guest came
+from: `idp_org` and `idp_org_name` (S), `idp_tenant` and `idp_tenant_name` (the tenant of S they signed in through)
+and `idp_sub` (their ID in S).
+
+A
 super admin can turn on **counts as a second factor** when S's rules require one of everybody who signs in to that
 application. Then B asks plain users for none.
 

@@ -77,7 +77,7 @@ A code used a second time fails, and everything issued from it is revoked.
 | `org` | `org`, `org_name`, `tenant`, `tenant_name`, `org_role` (`user`, `manager`, `admin` or `super_admin`) |
 | `roles` | `roles` (the application roles the user's access gives them) and `tags` |
 | `enterprise` | `enterprise`: job title, department, manager, employee number and the like |
-| `idp` | `idp`, `idp_sub`, `idp_tenant`, `idp_login`: the upstream provider the user signed in with, and the account there |
+| `idp` | `idp`, `idp_sub`, `idp_org`, `idp_org_name`, `idp_tenant`, `idp_tenant_name`, `idp_login`: the upstream provider the user signed in with, and the account there |
 | `offline_access` | No claims: refresh tokens outlive the user's browser session. |
 
 Access tokens always carry what APIs authorize on: `org`, `org_name`, `tenant`, `tenant_name`, `org_role`, `tags`,
@@ -98,10 +98,17 @@ which account there, so an app that calls the provider's own APIs knows it is th
 | --- | --- |
 | `idp` | `microsoft`, `google`, `gitlab`, `auth0`, `oidc`, `github` or `organization` |
 | `idp_sub` | The account's ID at the provider (for Microsoft, the object ID). Match on this. |
-| `idp_tenant` | Microsoft: the directory. Another organization: its ID. Otherwise absent. |
+| `idp_org`, `idp_org_name` | A guest from another organization: that organization's ID and name. Otherwise absent. |
+| `idp_tenant` | Microsoft: the directory. A guest: the ID of the tenant they signed in through in their own organization. Otherwise absent. |
+| `idp_tenant_name` | A guest: that tenant's name. Otherwise absent. |
 | `idp_login` | The account's name or email, for `login_hint`. It can change, so it is never an identity. |
 
 All are absent when the user signed in another way, such as with a password.
+
+For a [guest](/docs/sign-in/guest-accounts/), store the IDs (`idp_org`, `idp_sub`) and show people the names, such as
+"Pat, a guest from fortix, support". The names are read when the token is issued, so they follow a rename.
+`idp_tenant` is the tenant whose access list let the guest in. What the guest may do in your app is still what their
+account in this organization gives them.
 
 ## Userinfo
 
