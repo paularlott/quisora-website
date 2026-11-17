@@ -21,6 +21,8 @@ S and one of its tenants: type the start of S's name, or the tenant's, and choos
 searches as you type, so `S (sup` narrows to S's tenants starting "sup". Nothing else is needed. You do not enter a
 client ID, secret or scopes.
 
+{{< screenshot name="sign-org-provider" alt="The New sign-in provider dialog with the type Another organization and the organization and tenant list filtered as you type" class="max-w-2xl" >}}
+
 The tenant decides who in S may sign in. S's default tenant suits "everyone in S". A members-only tenant limits it to
 the people on its access list, for as long as their access lasts ([below](#only-some-people-for-a-time)).
 

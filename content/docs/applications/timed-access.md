@@ -14,8 +14,12 @@ chat bot) gives it through the management API. Quisora ends it.
 In the console, open the tenant. On its **Access** card, choose **Add access**, or edit an entry, and set
 **Access ends**. The list shows each entry's end under **Ends**.
 
+{{< screenshot name="app-access-ends" alt="A tenant's Access card listing two people whose access ends at a set time and a group with no end" class="max-w-3xl" >}}
+
 You enter the date and time in your own time zone, which the form names. Lists show the end in each viewer's own time
 zone.
+
+{{< screenshot name="app-access-dialog" alt="The Edit access dialog with Access ends set and the viewer's time zone named below it" class="max-w-2xl" >}}
 
 To give more time, edit the entry and set a later end. There is one entry per user or group in a tenant. To end access
 now, remove the entry.
