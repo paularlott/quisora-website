@@ -25,11 +25,12 @@ primary organization or another organization it owns.
    starting "sup". In most cases, choose the organization's **own tenant**, listed first (below).
 4. Create the provider. You don't enter a client ID, secret or scopes.
 5. In the home organization, give the people or groups who may sign in access to that tenant, for good or until a set
-   time. Or let them [ask for it](/docs/applications/access-requests/).
+   time. Or let them [ask for it](/docs/access/access-requests/).
 
 {{< screenshot name="sign-org-provider" alt="The New sign-in provider dialog with the type Another organization and the organization and tenant list filtered as you type" class="max-w-2xl" >}}
 
-The tenant decides who in the home organization may sign in:
+The tenant decides which people from the home organization get in, through its access list. Giving and ending that
+access works as for any tenant: see [Access](/docs/access/). The choices:
 
 - **Its own tenant** (the default): a new members-only tenant of the home organization, made for this provider and
   named after the host organization. Nobody is on its access list, so nobody signs in until an administrator of the
@@ -88,8 +89,8 @@ admits nobody. Choosing another home organization clears the groups.
 Take a vendor's support staff who need to reach into a customer's organization. The vendor is the home organization and
 the customer is the host. Give the provider its own tenant (the default), or another members-only tenant of the
 vendor. Only the people on its access list can sign in to the customer through the provider. Give each of them an
-entry that ends ([access for a limited time](/docs/applications/timed-access/)), or let them ask for one with an
-[access request](/docs/applications/access-requests/). A guest asks in their own organization, the vendor.
+entry that ends ([access for a limited time](/docs/access/timed-access/)), or let them ask for one with an
+[access request](/docs/access/access-requests/). A guest asks in their own organization, the vendor.
 
 - Without a live entry, their own or a group's, signing in through the provider is refused at home.
 - When their entry ends, is removed or narrowed, the guest is out of the host organization at once, and their sessions

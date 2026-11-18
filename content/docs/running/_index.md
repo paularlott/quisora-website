@@ -5,8 +5,23 @@ description: "Install, configure, back up, upgrade, monitor and cluster a Quisor
 weight: 100
 ---
 
-This section is for the person who runs the server: first start, settings, storage, keys, backups, upgrades, clusters
-and monitoring. Day-to-day administration happens in the console and is covered in the other sections.
+This section is for the person who runs the Quisora server. Day-to-day administration happens in the console, and is
+in the other sections.
+
+## What you can do here
+
+- Set up a new server, and run it as a service: [first start](/docs/running/first-start/)
+- Set the address, certificate, email and limits: [settings](/docs/running/settings/)
+- Choose a database: [storage](/docs/running/storage/)
+- See the server's health, keys and cluster: [the System page](/docs/running/system-page/)
+- Change the master key: [rotating the master key](/docs/running/rotating-the-master-key/)
+- Take backups and restore them: [backup and restore](/docs/running/backup-and-restore/)
+- Move to a new release: [upgrading](/docs/running/upgrading/)
+- Run several nodes: [clustering](/docs/running/clustering/), and what to do when nodes fail:
+  [running a gossip cluster](/docs/running/cluster-operations/)
+- Keep and search the audit log: [audit log](/docs/running/audit-log/)
+- Watch the server and set alerts: [health and monitoring](/docs/running/monitoring/)
+- Plan how big a server you need: [sizing](/docs/running/sizing/)
 
 ## In order
 
@@ -18,18 +33,3 @@ Going from a first try to production, work through these in turn:
 4. [Backup and restore](/docs/running/backup-and-restore/): nightly backups, and a tested restore.
 5. [Health and monitoring](/docs/running/monitoring/): health checks, metrics and alerts.
 6. [Upgrading](/docs/running/upgrading/): one release at a time.
-
-## In this guide
-
-- [First start](/docs/running/first-start/)
-- [Settings](/docs/running/settings/)
-- [Storage](/docs/running/storage/)
-- [The System page](/docs/running/system-page/)
-- [Rotating the master key](/docs/running/rotating-the-master-key/)
-- [Backup and restore](/docs/running/backup-and-restore/)
-- [Upgrading](/docs/running/upgrading/)
-- [Clustering](/docs/running/clustering/)
-- [Running a gossip cluster](/docs/running/cluster-operations/)
-- [Audit log](/docs/running/audit-log/)
-- [Health and monitoring](/docs/running/monitoring/)
-- [Sizing](/docs/running/sizing/)

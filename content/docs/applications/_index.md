@@ -5,8 +5,20 @@ description: "Sign users in to your apps with OpenID Connect, and get tokens for
 weight: 130
 ---
 
-Your apps sign users in through Quisora, your APIs check the tokens it issues, and your services get tokens of their
-own.
+This section is for connecting an app to Quisora: registering it, signing people in through it, and getting tokens for
+your APIs and services. To decide who may use an app, and for how long, see [Access](/docs/access/).
+
+## What you can do here
+
+- Register your first app: [your first application](#your-first-application)
+- Sign people in to an app, and read who they are: [signing users in](/docs/applications/signing-users-in/)
+- Choose how an app proves who it is: [client authentication](/docs/applications/client-authentication/)
+- Let a service call an API as itself, or for a user: [service to service](/docs/applications/service-to-service/)
+- Sign in on a TV, a CLI or another device without a browser: [device sign-in](/docs/applications/device-sign-in/)
+- Use stronger protection, up to FAPI 2.0: [stronger security](/docs/applications/stronger-security/)
+- Give apps fine-grained permissions: [authorization details](/docs/applications/authorization-details/)
+
+## Words used here
 
 - **OAuth 2** is the standard way for an app to get a token that lets it call an API.
 - **OpenID Connect** (OIDC) builds on OAuth 2 to sign people in: the app also gets a token that says who the person is.
@@ -15,7 +27,7 @@ own.
 ## Your first application
 
 1. In the console, open **Tenants** and choose the **Default** tenant. A tenant is a group of applications that share
-   sign-in rules. Every organization has a default one.
+   sign-in rules. Every organization has a default one, open to everyone in it ([Access](/docs/access/#tenants)).
 2. Choose **Manage clients**, then **New client**.
 3. Give it a name. Keep the client secret under **Authentication** for an app with a server, or choose **Public** for a
    single-page, mobile or desktop app.
@@ -112,15 +124,3 @@ expire.
 
 The implicit and hybrid flows, the password grant, request objects (JAR), mTLS client authentication and
 certificate-bound tokens, and front-channel logout.
-
-
-## In this guide
-
-- [Signing users in](/docs/applications/signing-users-in/): authorization code with PKCE, scopes and claims, refresh, introspection, sign-out
-- [Client authentication](/docs/applications/client-authentication/): secrets, private key JWT and public clients
-- [Service to service](/docs/applications/service-to-service/): client credentials and token exchange
-- [Device sign-in](/docs/applications/device-sign-in/): sign in on a CLI, a TV or another device without a browser
-- [Stronger security](/docs/applications/stronger-security/): pushed requests, DPoP and the FAPI 2.0 profile
-- [Authorization details](/docs/applications/authorization-details/): fine-grained permissions in access tokens
-- [Access for a limited time](/docs/applications/timed-access/): access list entries that end, and sign people out, at a set time
-- [Access requests](/docs/applications/access-requests/): people ask for access to a tenant for a while, and an approver group decides

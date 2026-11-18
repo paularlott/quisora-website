@@ -5,7 +5,7 @@ weight: 30
 ---
 
 Quisora sends these emails: an **invitation**, a **password reset**, an **address verification**, a notice that a
-**recovery code was used**, a **sign-in code**, and three for [access requests](/docs/applications/access-requests/):
+**recovery code was used**, a **sign-in code**, and three for [access requests](/docs/access/access-requests/):
 **access request** (to the approvers), **access request decided** and **access ended** (to the person who asked). Each is built from a **layout**, which holds the header and footer
 shared by every email, and the email's own **subject**, **HTML body** and **plain-text body**. Every email goes out
 with both an HTML and a plain-text part.

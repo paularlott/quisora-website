@@ -41,7 +41,7 @@ you hold (no secret is issued then). See [client authentication](/docs/applicati
 | `tenants` | Create, change and delete tenants |
 | `clients` | Manage applications and self-registered apps |
 | `access` | Manage tenants' access lists |
-| `access_requests:approve` | Approve or deny [access requests](/docs/applications/access-requests/), and end the access they gave, for the groups that let service accounts approve |
+| `access_requests:approve` | Approve or deny [access requests](/docs/access/access-requests/), and end the access they gave, for the groups that let service accounts approve |
 | `ssh` | Manage tenants' [SSH certificate](/docs/ssh/) settings, CA keys and issued certificates |
 | `ssh:host` | Only sign SSH host certificates |
 | `import` | With `users`, create users with a password hash, authenticator secret or provider links ([importing](/docs/automation/api-tokens/#importing-users-with-their-credentials)) |

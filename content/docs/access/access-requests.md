@@ -1,13 +1,14 @@
 ---
 title: "Access requests"
 description: "Let people ask for access to a tenant for a while, and let an approver group decide."
-weight: 75
+weight: 20
+aliases: ["/docs/applications/access-requests/"]
 ---
 
 People ask for access to a members-only tenant for a while. A member of an approver group says yes or no. The access
 then ends by itself.
 
-Approving gives the person an entry that ends ([access for a limited time](/docs/applications/timed-access/)). So
+Approving gives the person an entry that ends ([access for a limited time](/docs/access/timed-access/)). So
 everything that happens when timed access ends happens here too: they are signed out of the tenant's applications, and
 no token or SSH certificate outlives it.
 

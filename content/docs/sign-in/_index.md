@@ -5,8 +5,20 @@ description: "Passwords, passkeys, second factors, upstream providers, sessions 
 weight: 120
 ---
 
-This section is about how people sign in to Quisora and the rules that protect their accounts. (How applications sign
-people in through Quisora is in [Connecting applications](/docs/applications/).)
+This section is about how people sign in to Quisora, and the rules that protect their accounts. How your apps send
+people here is in [Connecting applications](/docs/applications/).
+
+## What you can do here
+
+- Choose how people sign in: [ways to sign in](#ways-to-sign-in)
+- Invite people: [inviting people](#inviting-people)
+- Set how long people stay signed in: [sessions](#sessions)
+- Add passkeys and authenticator apps, and require a second factor: [second factors](/docs/sign-in/second-factors/)
+- Let people sign in with Google, Microsoft or your own single sign-on: [upstream providers](/docs/sign-in/providers/)
+- Let people from another organization in as guests: [guest accounts](/docs/sign-in/guest-accounts/)
+- Keep administrator accounts safe: [protecting administrators](/docs/sign-in/protecting-administrators/)
+
+Who may use a tenant's apps (everyone, or only the people you choose) is set in [Access](/docs/access/).
 
 ## Where people sign in
 
@@ -75,10 +87,3 @@ Signing out and ending a session are not the same:
 
 To end everyone's sessions at once, or lock one person out, see
 [Emergency sign-out and lock-out](/docs/security/emergency-sign-out/).
-
-## In this guide
-
-- [Second factors](/docs/sign-in/second-factors/): passkeys, authenticator apps, recovery codes and codes by email
-- [Upstream providers](/docs/sign-in/providers/): Google, Microsoft, GitHub, GitLab, Auth0 and your own single sign-on
-- [Guest accounts](/docs/sign-in/guest-accounts/): letting the people of one organization into another
-- [Protecting administrators](/docs/sign-in/protecting-administrators/): re-authentication and the extra rules for administrators

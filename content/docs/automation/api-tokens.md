@@ -27,7 +27,7 @@ is made. If you are demoted or your account is disabled, the token loses that ac
 | `backup` | Super admins | Download a backup, and nothing else. Expires within 30 days. |
 | `import` | Super admins | With `admin`: create users with the password hash, authenticator secret and provider links they had in another system |
 | `api` | Whoever the organization allows | Nothing in Quisora itself: it is for your own applications, which check it with Quisora |
-| `access_requests` | Everyone | Your own [access requests](/docs/applications/access-requests/): ask, list, cancel and end your own access. Never approve. |
+| `access_requests` | Everyone | Your own [access requests](/docs/access/access-requests/): ask, list, cancel and end your own access. Never approve. |
 
 `import` works only together with `admin`. An `api` token cannot carry any other scope.
 Make one token for each job.

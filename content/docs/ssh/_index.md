@@ -12,6 +12,15 @@ copied to a server.
 Access is managed in Quisora. Remove someone from a group, disable them or sign them out, and their certificates stop
 working within a minute or two. There is no key to hunt down on every server.
 
+## What you can do here
+
+- Turn certificates on for a tenant, and choose who gets them: [turning it on](/docs/ssh/turning-it-on/)
+- Make a server trust the certificates: [setting up a server](/docs/ssh/setting-up-a-server/)
+- Get a certificate and log in: [getting a certificate](/docs/ssh/getting-a-certificate/)
+- Let people's ssh clients trust your servers: [host certificates](/docs/ssh/host-certificates/)
+- Take certificates back, and change the CA key: [revoking and rotating](/docs/ssh/revoking-and-rotating/)
+- Fix a login that fails: [troubleshooting](/docs/ssh/troubleshooting/)
+
 ## How it works
 
 1. A person runs `quisora ssh login` (or uses their account page) and signs in with a second factor.
@@ -32,13 +41,3 @@ Quisora never sees a private key. It only signs public keys.
   ([Setting up a server](/docs/ssh/setting-up-a-server/#ending-open-sessions)).
 - **Only enter a sign-in code you started yourself.** Someone could start a sign-in on their machine and send you the
   code. If you enter it, they get a certificate in your name.
-
-
-## In this guide
-
-- [Turning it on](/docs/ssh/turning-it-on/)
-- [Setting up a server](/docs/ssh/setting-up-a-server/)
-- [Getting a certificate](/docs/ssh/getting-a-certificate/)
-- [Host certificates](/docs/ssh/host-certificates/)
-- [Revoking and rotating](/docs/ssh/revoking-and-rotating/)
-- [Troubleshooting](/docs/ssh/troubleshooting/)

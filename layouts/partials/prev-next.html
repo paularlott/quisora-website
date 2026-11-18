@@ -1,14 +1,33 @@
-{{- $prev := .PrevInSection -}}
-{{- $next := .NextInSection -}}
+{{- /*
+  Previous and next page in the order of the docs sidebar: the docs index, its own pages, then each section's landing
+  page followed by its pages. The last page of a section leads on to the next section, so every page ends with a next
+  step.
+*/ -}}
+{{- $docs := site.GetPage "/docs" -}}
+{{- $flat := slice $docs -}}
+{{- range $docs.RegularPages.ByWeight }}{{ $flat = $flat | append . }}{{ end -}}
+{{- range $docs.Sections.ByWeight -}}
+  {{- $flat = $flat | append . -}}
+  {{- range .RegularPages.ByWeight }}{{ $flat = $flat | append . }}{{ end -}}
+{{- end -}}
+{{- $prev := false -}}
+{{- $next := false -}}
+{{- $here := .RelPermalink -}}
+{{- range $i, $p := $flat -}}
+  {{- if eq $p.RelPermalink $here -}}
+    {{- if gt $i 0 }}{{ $prev = index $flat (sub $i 1) }}{{ end -}}
+    {{- if lt (add $i 1) (len $flat) }}{{ $next = index $flat (add $i 1) }}{{ end -}}
+  {{- end -}}
+{{- end -}}
 {{- if or $prev $next -}}
 <nav class="mt-12 flex flex-col sm:flex-row gap-3 border-t border-edge pt-6" aria-label="Previous and next page">
-  {{ with $next }}
+  {{ with $prev }}
   <a href="{{ .RelPermalink }}" class="flex-1 rounded-2xl px-4 py-3 no-underline text-fg hover:bg-[var(--ctl-hover)] ring-1 ring-[var(--edge)]">
     <div class="text-xs text-muted">Previous</div>
     <div class="font-semibold">{{ .LinkTitle }}</div>
   </a>
   {{ else }}<div class="flex-1"></div>{{ end }}
-  {{ with $prev }}
+  {{ with $next }}
   <a href="{{ .RelPermalink }}" class="flex-1 rounded-2xl px-4 py-3 no-underline text-fg text-right hover:bg-[var(--ctl-hover)] ring-1 ring-[var(--edge)]">
     <div class="text-xs text-muted">Next</div>
     <div class="font-semibold">{{ .LinkTitle }}</div>

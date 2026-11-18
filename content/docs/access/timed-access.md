@@ -1,7 +1,8 @@
 ---
 title: "Access for a limited time"
 description: "Give a user or group access to a tenant's apps until a set time, and let Quisora end it."
-weight: 70
+weight: 10
+aliases: ["/docs/applications/timed-access/"]
 ---
 
 On a tenant whose **Who can sign in** is **Only users and groups given access**, an entry on its access list can end
@@ -9,7 +10,7 @@ On a tenant whose **Who can sign in** is **Only users and groups given access**,
 
 - an administrator gives it in the console;
 - a tool that approves requests its own way (a ticketing system, a chat bot) gives it through the management API;
-- a person asks for it in Quisora, and an approver group decides ([access requests](/docs/applications/access-requests/)).
+- a person asks for it in Quisora, and an approver group decides ([access requests](/docs/access/access-requests/)).
 
 Quisora ends it.
 
