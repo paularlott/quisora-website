@@ -4,8 +4,9 @@ description: "Rewrite the emails Quisora sends: invitations, resets, verificatio
 weight: 30
 ---
 
-Quisora sends five emails: an **invitation**, a **password reset**, an **address verification**, a notice that a
-**recovery code was used**, and a **sign-in code**. Each is built from a **layout**, which holds the header and footer
+Quisora sends these emails: an **invitation**, a **password reset**, an **address verification**, a notice that a
+**recovery code was used**, a **sign-in code**, and three for [access requests](/docs/applications/access-requests/):
+**access request** (to the approvers), **access request decided** and **access ended** (to the person who asked). Each is built from a **layout**, which holds the header and footer
 shared by every email, and the email's own **subject**, **HTML body** and **plain-text body**. Every email goes out
 with both an HTML and a plain-text part.
 

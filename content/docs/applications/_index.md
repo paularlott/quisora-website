@@ -123,3 +123,4 @@ certificate-bound tokens, and front-channel logout.
 - [Stronger security](/docs/applications/stronger-security/): pushed requests, DPoP and the FAPI 2.0 profile
 - [Authorization details](/docs/applications/authorization-details/): fine-grained permissions in access tokens
 - [Access for a limited time](/docs/applications/timed-access/): access list entries that end, and sign people out, at a set time
+- [Access requests](/docs/applications/access-requests/): people ask for access to a tenant for a while, and an approver group decides

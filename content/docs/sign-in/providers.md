@@ -37,8 +37,9 @@ organization's providers by default, including ones added later, or a few picked
 | **GitHub** | Nothing more. | An OAuth app on github.com, with the callback URL as the Authorization callback URL. |
 | **GitLab** | **GitLab address**: empty for gitlab.com, or your own server. | A GitLab application, with the callback URL as the redirect URI. |
 | **Auth0** | **Auth0 domain**, such as `acme.eu.auth0.com` (or your custom domain). | A Regular Web Application in Auth0, with the callback URL in **Allowed Callback URLs**. |
+| **Another organization** | The organization and the tenant its people sign in through. The organization's own tenant, listed first, lets nobody in until they are given access. | Nothing: see [guest accounts](/docs/sign-in/guest-accounts/). |
 
-Every type needs the **Client ID** and **Client secret** the provider gives you.
+Every type but **Another organization** needs the **Client ID** and **Client secret** the provider gives you.
 
 {{< tip >}}
 Microsoft: personal Microsoft accounts are not supported. Add the optional claim `xms_edov` to the app registration's

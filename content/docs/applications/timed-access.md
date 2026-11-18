@@ -5,9 +5,13 @@ weight: 70
 ---
 
 On a tenant whose **Who can sign in** is **Only users and groups given access**, an entry on its access list can end
-**at a set time**: three hours to deal with an incident, a day to help a customer. Quisora does not decide who should
-have it. An administrator gives it in the console, or a tool that approves requests its own way (a ticketing system, a
-chat bot) gives it through the management API. Quisora ends it.
+**at a set time**: three hours to deal with an incident, a day to help a customer. There are three ways to give it:
+
+- an administrator gives it in the console;
+- a tool that approves requests its own way (a ticketing system, a chat bot) gives it through the management API;
+- a person asks for it in Quisora, and an approver group decides ([access requests](/docs/applications/access-requests/)).
+
+Quisora ends it.
 
 ## Giving it
 

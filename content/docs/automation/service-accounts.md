@@ -41,6 +41,7 @@ you hold (no secret is issued then). See [client authentication](/docs/applicati
 | `tenants` | Create, change and delete tenants |
 | `clients` | Manage applications and self-registered apps |
 | `access` | Manage tenants' access lists |
+| `access_requests:approve` | Approve or deny [access requests](/docs/applications/access-requests/), and end the access they gave, for the groups that let service accounts approve |
 | `ssh` | Manage tenants' [SSH certificate](/docs/ssh/) settings, CA keys and issued certificates |
 | `ssh:host` | Only sign SSH host certificates |
 | `import` | With `users`, create users with a password hash, authenticator secret or provider links ([importing](/docs/automation/api-tokens/#importing-users-with-their-credentials)) |
@@ -100,7 +101,9 @@ account in the new organization, though it may still make one for a tool that st
   log, the list of organizations) stay closed to it. It cannot make super admins.
 - **Guest providers.** For an [Another organization](/docs/sign-in/guest-accounts/) provider, it may pick as the source
   only the primary organization or another organization it owns. It can't change or delete a provider whose source it
-  does not own.
+  does not own. A new provider gets a members-only tenant of its own in the primary organization, with nobody on its
+  access list. Give the people or groups who may sign in to the customer access there (the `access` scope; with an
+  end for access until a set time).
 - **Ownership stays with the account.** Rotating its secret or changing its keys keeps it. Deleting the account leaves
   its organizations to the super admins. Prefer `private_key_jwt` for an owner, so its keys can change with no gap.
 - Everything it does is in the organization's audit log as `service:<name>`, with `acting_as: owner`.

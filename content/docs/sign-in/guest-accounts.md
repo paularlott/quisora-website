@@ -20,16 +20,26 @@ primary organization or another organization it owns.
 
 1. In the host organization, open **Providers**, then **New provider**.
 2. Choose the type **Another organization**.
-3. Pick the home organization and one of its tenants. Type the start of the organization's name, or the tenant's, and
-   choose **Organization (tenant)** from the list. It searches as you type, so `Acme (sup` narrows to Acme's tenants
-   starting "sup".
+3. Pick the home organization and the tenant its people sign in through. Type the start of the organization's name,
+   or the tenant's, and choose from the list. It searches as you type, so `Acme (sup` narrows to Acme's tenants
+   starting "sup". In most cases, choose the organization's **own tenant**, listed first (below).
 4. Create the provider. You don't enter a client ID, secret or scopes.
+5. In the home organization, give the people or groups who may sign in access to that tenant, for good or until a set
+   time. Or let them [ask for it](/docs/applications/access-requests/).
 
 {{< screenshot name="sign-org-provider" alt="The New sign-in provider dialog with the type Another organization and the organization and tenant list filtered as you type" class="max-w-2xl" >}}
 
-The tenant decides who in the home organization may sign in. Its default tenant suits "everyone". A members-only
-tenant limits it to the people on its access list, for as long as their access lasts
-([below](#only-some-people-for-a-time)).
+The tenant decides who in the home organization may sign in:
+
+- **Its own tenant** (the default): a new members-only tenant of the home organization, made for this provider and
+  named after the host organization. Nobody is on its access list, so nobody signs in until an administrator of the
+  home organization gives them access there. To let everyone in, set its **Who can sign in** to **Everyone in the
+  organization**. It holds the provider's sign-in application and nothing else, is marked **Provider sign-ins**, and is
+  removed with the provider. One tenant per host keeps each host's access list apart.
+- **An existing tenant**: the default tenant suits "everyone". A members-only one limits it to the people on its access
+  list, shared by every provider that uses it. Another provider's own tenant can't be chosen.
+
+Providers made before own tenants existed keep the tenant they have.
 
 Quisora makes the client the provider signs in with, in the home organization: an application named
 `Sign-in to <host's name>` in the chosen tenant. It is listed with the home organization's applications, but edit the
@@ -76,9 +86,10 @@ admits nobody. Choosing another home organization clears the groups.
 ## Only some people, for a time
 
 Take a vendor's support staff who need to reach into a customer's organization. The vendor is the home organization and
-the customer is the host. Pick a members-only tenant of the vendor as the provider's tenant, say `customer-access`.
-Only the people on its access list can sign in to the customer through the provider. Give each of them an entry that
-ends ([access for a limited time](/docs/applications/timed-access/)).
+the customer is the host. Give the provider its own tenant (the default), or another members-only tenant of the
+vendor. Only the people on its access list can sign in to the customer through the provider. Give each of them an
+entry that ends ([access for a limited time](/docs/applications/timed-access/)), or let them ask for one with an
+[access request](/docs/applications/access-requests/). A guest asks in their own organization, the vendor.
 
 - Without a live entry, their own or a group's, signing in through the provider is refused at home.
 - When their entry ends, is removed or narrowed, the guest is out of the host organization at once, and their sessions
