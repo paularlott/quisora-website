@@ -7,7 +7,12 @@ weight: 20
 You need Docker with Compose. You don't need the Quisora repository: the file uses the image from Docker Hub.
 
 1. **Download** [compose.yml](https://github.com/paularlott/quisora/blob/main/deploy/compose.yml) into a folder of its
-   own, and open a terminal there.
+   own, and open a terminal there:
+
+   ```bash
+   mkdir quisora && cd quisora
+   curl -fsSLO https://raw.githubusercontent.com/paularlott/quisora/main/deploy/compose.yml
+   ```
 
 2. **Make the master key**, once. Save the key it prints in a password manager:
 

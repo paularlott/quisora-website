@@ -22,7 +22,9 @@ The link works once and lasts 7 days. Running `bootstrap` again changes nothing.
 runs:
 
 ```bash
-quisora invite primary admin@example.com
+quisora invite primary admin@example.com                        # the binary
+docker exec quisora quisora invite primary admin@example.com     # Docker
+docker compose exec quisora quisora invite primary admin@example.com   # Docker Compose
 ```
 
 ## What next
