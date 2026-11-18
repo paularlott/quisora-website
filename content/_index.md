@@ -92,16 +92,18 @@ Online backups, always encrypted with a password. A restore is checked before an
 
 <section class="glass mt-20 p-6 sm:p-10 text-center">
   <h2 class="text-3xl font-extrabold tracking-tight mb-3">Getting started</h2>
-  <p class="text-muted text-lg max-w-xl mx-auto mb-6">Make a master key once and save it in a password manager. Set it in your terminal, set the server up once, and start it. Then open the link it prints and make your admin account.</p>
+  <p class="text-muted text-lg max-w-xl mx-auto mb-6">Try it in Docker. Make a master key once and save it in a password manager, set the server up once, and start it. Then open the link it prints and make your admin account.</p>
   <div class="max-w-2xl mx-auto text-left">
 
 ```bash
-quisora genkey                       # once: save the key it prints in a password manager
-export QUISORA_MASTER_KEY=<the key>  # again in each new terminal
-quisora bootstrap --public-url https://localhost:8443
-quisora serve --public-url https://localhost:8443
+docker run --rm paularlott/quisora genkey    # once: save the key in a password manager
+export QUISORA_MASTER_KEY=<the key>          # again in each new terminal
+docker run --rm -v quisora-data:/data -e QUISORA_MASTER_KEY \
+  -e QUISORA_PUBLIC_URL=https://localhost:8443 paularlott/quisora bootstrap
+docker run -d --name quisora --restart unless-stopped -p 8443:8443 -v quisora-data:/data \
+  -e QUISORA_MASTER_KEY -e QUISORA_PUBLIC_URL=https://localhost:8443 paularlott/quisora
 ```
 
   </div>
-  <a href="/docs/getting-started/" class="btn btn-primary mt-4">Read the getting started guide</a>
+  <a href="/docs/getting-started/#choose-how-to-run-it" class="btn btn-primary mt-4">Choose how to run it</a>
 </section>

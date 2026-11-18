@@ -14,24 +14,14 @@
     {{ range .RegularPages.ByWeight }}
       <li><a href="{{ .RelPermalink }}" class="nav-link{{ if eq $ctx.RelPermalink .RelPermalink }} active-nav-item{{ end }}">{{ .LinkTitle }}</a></li>
     {{ end }}
+    {{ range where .Sections.ByWeight "Params.guide" true }}
+      {{ partial "nav-section.html" (dict "context" $ctx "section" .) }}
+    {{ end }}
   </ul>
   <div class="nav-group">Reference</div>
   <ul class="space-y-1">
     {{ range .Sections.ByWeight }}
-      {{ $open := or (eq $ctx.RelPermalink .RelPermalink) (.IsAncestor $ctx) }}
-      <li>
-        <a href="{{ .RelPermalink }}" class="nav-link{{ if eq $ctx.RelPermalink .RelPermalink }} active-nav-item{{ end }}"{{ if $open }} aria-expanded="true"{{ end }}>
-          <span>{{ .LinkTitle }}</span>
-          <svg class="h-4 w-4 flex-shrink-0 opacity-60 transition-transform{{ if $open }} rotate-90{{ end }}" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06.02z" clip-rule="evenodd"/></svg>
-        </a>
-        {{ if $open }}
-          <ul class="ml-3 mt-1 mb-2 pl-2 space-y-0.5 border-l border-edge">
-            {{ range .RegularPages.ByWeight }}
-              <li><a href="{{ .RelPermalink }}" class="nav-link nav-sub{{ if eq $ctx.RelPermalink .RelPermalink }} active-nav-item{{ end }}">{{ .LinkTitle }}</a></li>
-            {{ end }}
-          </ul>
-        {{ end }}
-      </li>
+      {{ if not .Params.guide }}{{ partial "nav-section.html" (dict "context" $ctx "section" .) }}{{ end }}
     {{ end }}
   </ul>
 {{ end }}

@@ -4,6 +4,9 @@ description: "Create the first organization and super admin, then run the server
 weight: 10
 ---
 
+Trying Quisora for the first time? Start with [Getting started](/docs/getting-started/). This page is the detail for a
+server you will keep running.
+
 `quisora serve` never creates anything. Set a new server up once with `quisora bootstrap`, then serve:
 
 ```bash
@@ -96,67 +99,17 @@ admins are gone, `quisora invite --break-glass --super-admin` recovers access.
 
 ## Docker
 
-The image is `paularlott/quisora` on Docker Hub. It runs as a non-root user and keeps its data in `/data`. Settings
-are `QUISORA_*` variables.
+To set up a server in Docker for the first time, follow [Docker](/docs/getting-started/docker/) or
+[Docker Compose](/docs/getting-started/docker-compose/) in Getting started. For production, also:
 
-`paularlott/quisora:latest` is the newest release. For production, pin a release (`paularlott/quisora:<version>`) and
-change it on purpose when you [upgrade](/docs/running/upgrading/#with-docker).
-
-1. Make the master key once, and save it in a password manager:
-
-   ```bash
-   docker run --rm paularlott/quisora genkey
-   ```
-
-2. Set it in your terminal. Do this again in each new terminal:
-
-   ```bash
-   export QUISORA_MASTER_KEY=<the key>
-   ```
-
-3. Set the server up once. Copy the invitation link it prints: `docker logs` won't show it later.
-
-   ```bash
-   docker run --rm -v quisora-data:/data -e QUISORA_MASTER_KEY \
-     -e QUISORA_PUBLIC_URL=https://localhost:8443 paularlott/quisora bootstrap
-   ```
-
-4. Start it in the background:
-
-   ```bash
-   docker run -d --name quisora --restart unless-stopped -p 8443:8443 -v quisora-data:/data \
-     -e QUISORA_MASTER_KEY -e QUISORA_PUBLIC_URL=https://localhost:8443 paularlott/quisora
-   ```
-
-- The volume on `/data` holds the store, the node's id and the audit spool. Keep it.
-- `quisora healthcheck` is the container health check (liveness). Don't restart a node for being unready: a cluster
-  node catching up is alive. `quisora healthcheck --ready` checks readiness.
-
-### Docker Compose
-
-For one node, use [compose.yml](https://github.com/paularlott/quisora/blob/main/deploy/compose.yml). You don't need the
-repository: the file uses the image from Docker Hub.
-
-1. Download `compose.yml` into a folder of its own, and open a terminal there.
-2. Make the master key once with `docker run --rm paularlott/quisora genkey`, and save it in a password manager.
-3. Set it: `export QUISORA_MASTER_KEY=<the key>`.
-4. Set the server up once. Copy the link it prints:
-
-   ```bash
-   docker compose run --rm quisora bootstrap
-   ```
-
-5. Start it:
-
-   ```bash
-   docker compose up -d
-   ```
-
-[compose.cluster.yml](https://github.com/paularlott/quisora/blob/main/deploy/compose.cluster.yml) runs three nodes on
-PostgreSQL, as a lab example. It needs `POSTGRES_PASSWORD` and `QUISORA_NOTIFY_KEY` as well as the master key. The steps
-are at the top of the file.
-
-### Building the image yourself
-
-From a copy of the repository: `docker build -t paularlott/quisora .`. For the
-[1Password build](/docs/security/secret-stores/#1password-service-accounts), add `--build-arg GO_TAGS=onepassword`.
+- **Pin a release.** Use `paularlott/quisora:<version>` rather than `:latest`, and change it on purpose when you
+  [upgrade](/docs/running/upgrading/#with-docker).
+- **Keep the volume.** The volume on `/data` holds the store, the node's id and the audit spool. Settings are
+  `QUISORA_*` variables.
+- **Health checks.** `quisora healthcheck` is the container health check (liveness). Don't restart a node for being
+  unready: a cluster node catching up is alive. `quisora healthcheck --ready` checks readiness.
+- **A cluster.** [compose.cluster.yml](https://github.com/paularlott/quisora/blob/main/deploy/compose.cluster.yml) runs
+  three nodes on PostgreSQL, as a lab example. It needs `POSTGRES_PASSWORD` and `QUISORA_NOTIFY_KEY` as well as the
+  master key. The steps are at the top of the file. See [clustering](/docs/running/clustering/).
+- **Your own image.** From a copy of the repository: `docker build -t paularlott/quisora .`. For the
+  [1Password build](/docs/security/secret-stores/#1password-service-accounts), add `--build-arg GO_TAGS=onepassword`.
