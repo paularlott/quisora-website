@@ -96,23 +96,67 @@ admins are gone, `quisora invite --break-glass --super-admin` recovers access.
 
 ## Docker
 
-The [Dockerfile](https://github.com/paularlott/quisora/blob/main/Dockerfile) builds a static binary on a distroless
-base. It runs as a non-root user and keeps its data in `/data`. Settings are `QUISORA_*` variables.
+The image is `paularlott/quisora` on Docker Hub. It runs as a non-root user and keeps its data in `/data`. Settings
+are `QUISORA_*` variables.
 
-Make the master key once, save it in a password manager, then set it in each new terminal:
+`paularlott/quisora:latest` is the newest release. For production, pin a release (`paularlott/quisora:<version>`) and
+change it on purpose when you [upgrade](/docs/running/upgrading/#with-docker).
 
-```bash
-docker build -t quisora .
-docker run --rm quisora genkey               # once: save the key it prints
-export QUISORA_MASTER_KEY=<the key>          # in each new terminal
+1. Make the master key once, and save it in a password manager:
 
-docker run --rm -v quisora-data:/data -e QUISORA_MASTER_KEY -e QUISORA_PUBLIC_URL=https://localhost:8443 quisora bootstrap
-docker run -d -p 8443:8443 -v quisora-data:/data -e QUISORA_MASTER_KEY -e QUISORA_PUBLIC_URL=https://localhost:8443 quisora
-```
+   ```bash
+   docker run --rm paularlott/quisora genkey
+   ```
 
-- Mount a volume on `/data`. It holds the store, the node's id and the audit spool.
-- `quisora healthcheck` is the container health check (liveness). Do not restart a node for being unready: a cluster
+2. Set it in your terminal. Do this again in each new terminal:
+
+   ```bash
+   export QUISORA_MASTER_KEY=<the key>
+   ```
+
+3. Set the server up once. Copy the invitation link it prints: `docker logs` won't show it later.
+
+   ```bash
+   docker run --rm -v quisora-data:/data -e QUISORA_MASTER_KEY \
+     -e QUISORA_PUBLIC_URL=https://localhost:8443 paularlott/quisora bootstrap
+   ```
+
+4. Start it in the background:
+
+   ```bash
+   docker run -d --name quisora --restart unless-stopped -p 8443:8443 -v quisora-data:/data \
+     -e QUISORA_MASTER_KEY -e QUISORA_PUBLIC_URL=https://localhost:8443 paularlott/quisora
+   ```
+
+- The volume on `/data` holds the store, the node's id and the audit spool. Keep it.
+- `quisora healthcheck` is the container health check (liveness). Don't restart a node for being unready: a cluster
   node catching up is alive. `quisora healthcheck --ready` checks readiness.
-- [deploy/compose.yml](https://github.com/paularlott/quisora/blob/main/deploy/compose.yml) runs one node.
-  [deploy/compose.cluster.yml](https://github.com/paularlott/quisora/blob/main/deploy/compose.cluster.yml) runs three
-  nodes on PostgreSQL, as a lab example. It needs `POSTGRES_PASSWORD` and `QUISORA_NOTIFY_KEY` as well as the master key.
+
+### Docker Compose
+
+For one node, use [compose.yml](https://github.com/paularlott/quisora/blob/main/deploy/compose.yml). You don't need the
+repository: the file uses the image from Docker Hub.
+
+1. Download `compose.yml` into a folder of its own, and open a terminal there.
+2. Make the master key once with `docker run --rm paularlott/quisora genkey`, and save it in a password manager.
+3. Set it: `export QUISORA_MASTER_KEY=<the key>`.
+4. Set the server up once. Copy the link it prints:
+
+   ```bash
+   docker compose run --rm quisora bootstrap
+   ```
+
+5. Start it:
+
+   ```bash
+   docker compose up -d
+   ```
+
+[compose.cluster.yml](https://github.com/paularlott/quisora/blob/main/deploy/compose.cluster.yml) runs three nodes on
+PostgreSQL, as a lab example. It needs `POSTGRES_PASSWORD` and `QUISORA_NOTIFY_KEY` as well as the master key. The steps
+are at the top of the file.
+
+### Building the image yourself
+
+From a copy of the repository: `docker build -t paularlott/quisora .`. For the
+[1Password build](/docs/security/secret-stores/#1password-service-accounts), add `--build-arg GO_TAGS=onepassword`.

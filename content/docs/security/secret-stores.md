@@ -87,6 +87,7 @@ They go in the configuration file, in a file it names (`*_file`: the file's firs
 
 1Password service accounts talk to 1Password's servers over the internet, and only builds with the `onepassword` tag
 include them: `task build-1password`, the `quisora-1password-...` release binaries, or
-`docker build --build-arg GO_TAGS=onepassword` (about 15 MB larger). Any other build reads 1Password through a
+an image you build yourself with `docker build --build-arg GO_TAGS=onepassword -t paularlott/quisora:1password .`
+(about 15 MB larger). Any other build reads 1Password through a
 Connect server you run and refuses a service account token with a message saying so. Vault and Connect can both run
 on your own network.
