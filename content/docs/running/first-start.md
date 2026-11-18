@@ -111,5 +111,4 @@ To set up a server in Docker for the first time, follow [Docker](/docs/getting-s
 - **A cluster.** [compose.cluster.yml](https://github.com/paularlott/quisora/blob/main/deploy/compose.cluster.yml) runs
   three nodes on PostgreSQL, as a lab example. It needs `POSTGRES_PASSWORD` and `QUISORA_NOTIFY_KEY` as well as the
   master key. The steps are at the top of the file. See [clustering](/docs/running/clustering/).
-- **Your own image.** From a copy of the repository: `docker build -t paularlott/quisora .`. For the
-  [1Password build](/docs/security/secret-stores/#1password-service-accounts), add `--build-arg GO_TAGS=onepassword`.
+- **Your own image.** From a copy of the repository: `docker build -t paularlott/quisora .`.

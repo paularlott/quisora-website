@@ -85,9 +85,12 @@ They go in the configuration file, in a file it names (`*_file`: the file's firs
 
 ## 1Password service accounts
 
-1Password service accounts talk to 1Password's servers over the internet, and only builds with the `onepassword` tag
-include them: `task build-1password`, the `quisora-1password-...` release binaries, or
-an image you build yourself with `docker build --build-arg GO_TAGS=onepassword -t paularlott/quisora:1password .`
-(about 15 MB larger). Any other build reads 1Password through a
-Connect server you run and refuses a service account token with a message saying so. Vault and Connect can both run
-on your own network.
+A 1Password service account talks to 1Password's servers over the internet. Quisora comes in two builds:
+
+- **`quisora`** is the full build, and takes service accounts. It is the `quisora-<os>-<arch>` release binaries, the
+  `paularlott/quisora` Docker image and `task build`.
+- **`quisora-slim`** leaves service accounts out and is about 15 MB smaller. It is the `quisora-slim-<os>-<arch>`
+  release binaries and `task build-slim`. It reads 1Password through a Connect server you run, and refuses a service
+  account token with a message saying so.
+
+Vault and 1Password Connect work in both builds, and can both run on your own network.

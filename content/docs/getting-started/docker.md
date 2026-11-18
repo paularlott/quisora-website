@@ -13,7 +13,8 @@ You need Docker installed. Nothing else.
    ```
 
    `paularlott/quisora:latest` is the newest release. For production, pin a release, such as
-   `paularlott/quisora:<version>`, and change it on purpose when you upgrade.
+   `paularlott/quisora:<version>`, and change it on purpose when you upgrade. The image has everything in it,
+   1Password service accounts too.
 
 2. **Make the master key**, once. Save the key it prints in a password manager:
 

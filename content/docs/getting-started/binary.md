@@ -9,6 +9,9 @@ Quisora is one program, `quisora`. These steps use a terminal on Linux or macOS.
 variables with `$env:QUISORA_MASTER_KEY = "<the key>"` instead of `export`.
 
 1. **Download** the binary for your system from the [releases on GitHub](https://github.com/paularlott/quisora/releases).
+   Take `quisora-<os>-<arch>`, such as `quisora-linux-amd64`. If you don't use
+   [1Password service accounts](/docs/security/secret-stores/#1password-service-accounts), `quisora-slim-<os>-<arch>`
+   is a smaller file without them.
    Name it `quisora` and put it somewhere on your path. On Linux and macOS, make it runnable:
    `chmod +x quisora`.
 

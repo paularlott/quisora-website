@@ -4,7 +4,8 @@ description: "Run one Quisora node from a downloaded compose.yml."
 weight: 20
 ---
 
-You need Docker with Compose. You don't need the Quisora repository: the file uses the image from Docker Hub.
+You need Docker with Compose. You don't need the Quisora repository: the file uses the image from Docker Hub, which
+has everything in it, 1Password service accounts too.
 
 1. **Download** [compose.yml](https://github.com/paularlott/quisora/blob/main/deploy/compose.yml) into a folder of its
    own, and open a terminal there:

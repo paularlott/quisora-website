@@ -21,11 +21,12 @@ You need Go 1.27, Node 24 and [Task](https://taskfile.dev).
    task build        # makes bin/quisora
    ```
 
+   Or `task build-slim` makes `bin/quisora-slim`, a smaller build without
+   [1Password service accounts](/docs/security/secret-stores/#1password-service-accounts).
+
    Or build the image instead: `docker build -t paularlott/quisora .`
 
 3. **Run it.** From here, follow the steps for [the quisora binary](/docs/getting-started/binary/) from step 2, using
    `bin/quisora`. For the image you built, follow [Docker](/docs/getting-started/docker/) from step 2.
-
-For the build with 1Password service accounts, see [secret stores](/docs/security/secret-stores/#1password-service-accounts).
 
 Next: [first sign-in](/docs/getting-started/first-sign-in/).
