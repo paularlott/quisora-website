@@ -28,6 +28,7 @@ is made. If you are demoted or your account is disabled, the token loses that ac
 | `import` | Super admins | With `admin`: create users with the password hash, authenticator secret and provider links they had in another system |
 | `api` | Whoever the organization allows | Nothing in Quisora itself: it is for your own applications, which check it with Quisora |
 | `access_requests` | Everyone | Your own [access requests](/docs/access/access-requests/): ask, list, cancel and end your own access. Never approve. |
+| `call_verify` | Agents | [Verify callers](/docs/security/verifying-callers/#from-a-crm-or-helpdesk) as you, from a CRM or helpdesk. Offered to members of your organization's agent groups. |
 
 `import` works only together with `admin`. An `api` token cannot carry any other scope.
 Make one token for each job.
