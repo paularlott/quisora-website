@@ -1,0 +1,5 @@
+{{- /* A notice at the top of every page of the Security and compliance section, its landing page included. */ -}}
+{{- $sec := site.GetPage "/docs/security" -}}
+{{- if and $sec (or (eq .Path $sec.Path) (.IsDescendant $sec)) -}}
+{{- partial "tip-box.html" (dict "warn" false "body" ("<strong>These are ideas, not a definitive list of best practices.</strong> Quisora's authors are not compliance auditors. Check with your organization's security officer that what you run meets your company's policy and the standards you answer to." | safeHTML)) -}}
+{{- end -}}

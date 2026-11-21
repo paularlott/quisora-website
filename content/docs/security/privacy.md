@@ -50,7 +50,7 @@ What remains:
 ## Choices that reduce what is kept
 
 - `audit.logins = false` stops recording successful sign-ins (failures are always recorded). Keep it on if you need an
-  audit trail for SOC 2 or similar: successful sign-ins are the evidence of access reviews.
+  audit trail: successful sign-ins are the evidence of access reviews.
 - `log.access = false` keeps request paths and client addresses out of the log (query strings are never logged).
 - Use a short `audit.retention_days` and a VictoriaLogs retention no longer than your audit period needs.
 - Keep backups no longer than your recovery policy needs.

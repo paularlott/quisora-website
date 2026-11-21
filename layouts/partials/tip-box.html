@@ -1,0 +1,9 @@
+{{- /* A note in a tinted box: dict "warn" bool "body" html. Used by the tip shortcode and the section notice. */ -}}
+{{- $warn := .warn -}}
+<div class="not-prose my-5 flex gap-3 rounded-2xl px-4 py-3 text-[0.95rem] ring-1 {{ if $warn }}bg-amber-100/60 ring-amber-300/70 dark:bg-amber-400/10 dark:ring-amber-300/30{{ else }}bg-indigo-100/60 ring-indigo-300/60 dark:bg-indigo-400/10 dark:ring-indigo-300/30{{ end }}">
+  <svg class="w-6 h-6 flex-shrink-0 mt-0.5 {{ if $warn }}text-amber-700 dark:text-amber-300{{ else }}text-accent{{ end }}" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
+    {{- if $warn }}<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/>
+    {{- else }}<path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/>{{ end }}
+  </svg>
+  <div class="tip-body text-fg [&_a]:text-accent [&_a]:underline [&_code]:text-[0.85em]">{{ .body }}</div>
+</div>

@@ -151,5 +151,3 @@ agent's and the caller's:
 | `call_verify.confirm` | The caller confirmed it is them. `detail.second_factor` says whether with a passkey or second factor. |
 | `call_verify.deny` | The caller chose **Not me**. |
 | `call_verify.cancel` | The agent cancelled it. |
-
-For SOC 2 evidence, see [SOC 2 with Quisora and VictoriaLogs](/docs/security/soc2/).

@@ -1,11 +1,11 @@
 ---
-title: "SOC 2 with Quisora and VictoriaLogs"
-description: "How Quisora maps to the SOC 2 criteria for an identity provider, and where the evidence comes from."
+title: "Audit evidence (SOC 2)"
+description: "One way to map the SOC 2 criteria for an identity provider to Quisora, and where the evidence can come from."
 weight: 50
 ---
 
-This maps the SOC 2 criteria an identity provider is examined against to what Quisora does, what you must run around
-it, and where the evidence comes from. It assumes audit events go to VictoriaLogs ([Audit log](/docs/running/audit-log/)).
+This is one way to map the SOC 2 criteria an identity provider is examined against to what Quisora does, what you
+might run around it, and where the evidence can come from. Your auditor decides what they need. It assumes audit events go to VictoriaLogs ([Audit log](/docs/running/audit-log/)).
 The database audit trail is not meant for an audit: it is kept for days, and in a gossip cluster each node keeps only
 its own events.
 

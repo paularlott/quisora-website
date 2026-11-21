@@ -5,6 +5,7 @@
     <div class="prose max-w-none">
       <h1 class="!mb-3">{{ .Title }}</h1>
       {{ with .Description }}<p class="lead !mt-0">{{ . }}</p>{{ end }}
+      {{ partial "section-notice.html" . }}
       {{ .Content }}
     </div>
     {{ partial "prev-next.html" . }}

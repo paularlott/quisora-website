@@ -1,12 +1,12 @@
 ---
 title: "Security and compliance"
 linkTitle: "Security and compliance"
-description: "Run Quisora securely, handle incidents, keep secrets in a store, and prepare for SOC 2."
+description: "Ideas for running Quisora securely, handling incidents, keeping secrets in a store, and keeping audit evidence."
 weight: 160
 ---
 
 Quisora is an identity provider: whoever controls it controls every application that trusts it. These pages cover
-what you need to run it safely, what to do when something goes wrong, and what auditors ask for.
+ways to run it safely, what to do when something goes wrong, and how to keep a record of what happened.
 
 ## What you can do here
 
@@ -15,6 +15,6 @@ what you need to run it safely, what to do when something goes wrong, and what a
 - Sign everyone out at once, or lock one person out: [emergency sign-out and lock-out](/docs/security/emergency-sign-out/)
 - Let your support team confirm who is on a phone call: [verifying callers](/docs/access/verifying-callers/)
 - Find out what personal data Quisora keeps: [personal data in Quisora](/docs/security/privacy/)
-- Collect the evidence auditors ask for: [SOC 2 with Quisora and VictoriaLogs](/docs/security/soc2/)
+- Keep audit evidence, such as for SOC 2: [audit evidence](/docs/security/soc2/)
 
 To report a vulnerability, see [the security policy](https://github.com/paularlott/quisora/blob/main/SECURITY.md).

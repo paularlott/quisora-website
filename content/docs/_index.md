@@ -19,7 +19,7 @@ New to Quisora? Start with [Getting started](/docs/getting-started/).
 | [Automation](/docs/automation/) | script Quisora with API tokens, service accounts, SCIM or MCP. |
 | [SSH certificates](/docs/ssh/) | let people log in to servers with short-lived certificates. |
 | [Look and email](/docs/branding/) | change how the pages and emails look. |
-| [Security and compliance](/docs/security/) | harden the server, handle an incident, and prepare for an audit. |
+| [Security and compliance](/docs/security/) | harden the server, handle an incident, and keep audit evidence. |
 
 ## What Quisora is
 

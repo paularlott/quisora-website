@@ -17,8 +17,7 @@ read it from one of two places. Administrators see **Audit log** in their organi
 | Gossip cluster | Each node keeps its own events. A page asks every node and merges the answers, and says which did not answer. | Every node sends. Any node reads. |
 
 {{< tip "warning" >}}
-Production, and any deployment whose compliance standard or security policy requires a retained audit trail, must use
-VictoriaLogs. The database trail keeps events for days, not a year or more, is per node in a cluster, and has no
+Production, and any deployment whose policy requires a retained audit trail, must use VictoriaLogs. The database trail keeps events for days, not a year or more, is per node in a cluster, and has no
 protection against someone with write access to the database.
 {{< /tip >}}
 
@@ -71,8 +70,8 @@ victorialogs_url = "http://victorialogs:9428"   # user:password@ in the URL is s
 
 - Set VictoriaLogs' retention to cover your audit period (`-retentionPeriod=1y` or more).
 - Make it the protected copy: only Quisora may write to it, nobody may delete or rewrite during the retention period, and
-  its storage is backed up to write-once storage. [SOC 2 with Quisora and VictoriaLogs](/docs/security/soc2/) shows how,
-  and how to check that no event is missing (each node numbers its events with `boot` and `seq`).
+  its storage is backed up to write-once storage. [Audit evidence](/docs/security/soc2/) has one way to do it, and to
+  check that no event is missing (each node numbers its events with `boot` and `seq`).
 - A sign-in never waits for VictoriaLogs. Events are sent in the background.
 - Ship Quisora's structured log too, and alert on `audit.undelivered`: each such line is an event VictoriaLogs will never
   receive, logged in full so it can still be captured.
