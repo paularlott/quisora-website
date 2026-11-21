@@ -1,7 +1,8 @@
 ---
 title: "Verifying callers"
 description: "Let your support team confirm that the person on a phone call is really the account holder."
-weight: 35
+weight: 30
+aliases: ["/docs/security/verifying-callers/"]
 ---
 
 When someone phones your support team and says "I'm Alan", how does the agent know? Asking for a password or the

@@ -16,7 +16,7 @@ groups.
 - Give access that ends at a set time: [access for a limited time](/docs/access/timed-access/).
 - Let people ask for access, and have someone approve it: [access requests](/docs/access/access-requests/).
 - Let people from another organization in as guests: [guest accounts](/docs/sign-in/guest-accounts/).
-- Let your support team confirm that a caller is the account holder: [verifying callers](/docs/security/verifying-callers/).
+- Let your support team confirm that a caller is the account holder: [verifying callers](/docs/access/verifying-callers/).
 
 ## Tenants
 
@@ -84,4 +84,5 @@ remove people from the group.
 
 - [Access for a limited time](/docs/access/timed-access/): access that ends, and signs people out, at a set time
 - [Access requests](/docs/access/access-requests/): people ask for access for a while, and an approver group decides
+- [Verifying callers](/docs/access/verifying-callers/): your support team confirms the person on a call is the account holder
 - [Guest accounts](/docs/sign-in/guest-accounts/): people from another organization, let in through a provider
